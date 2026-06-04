@@ -1,0 +1,324 @@
+:root {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #1A2B43;
+  /* background: #ffffff; */
+  background: #f4f4f4;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* background: #ffffff; */
+  background: #f4f4f4;
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(260px, .7fr) minmax(520px, 1.3fr);
+}
+
+.sidebar,
+.game {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.side-card,
+.game,
+.visual-card,
+.message,
+.clue-box,
+.room-grid section {
+  border: 1px solid #8f6f48;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px #0001;
+}
+
+.side-card,
+.game,
+.clue-box,
+.room-grid section {
+  background: #ffffff;
+}
+
+.side-card {
+  padding: 16px;
+}
+
+.side-card h2,
+.clue-box summary,
+.room-grid h3 {
+  color: #1A2B43;
+}
+
+.side-card h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.side-card p,
+.room-grid p,
+.clue-box p { margin: 0; line-height: 1.45; }
+
+.side-card ul,
+.clue-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.side-card li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1.25;
+}
+
+.side-card li button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid #8f6f48;
+  background: #ffffff;
+  color: #1A2B43;
+}
+
+.checklist li {
+  justify-content: flex-start;
+  color: #5b6676;
+}
+
+.checklist li.done {
+  color: #1A2B43;
+  font-weight: bold;
+}
+
+.game {
+  padding: 24px;
+}
+
+.visual-card {
+  /* min-height: 230px; */
+  background: #1A2B43;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  border: 8px double #8f6f48;
+  margin: 10px 0 12px;
+}
+
+.visual-card p {
+  margin: 0;
+  max-width: 52ch;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.sidebar-visual-card {
+  /* min-height: 160px; */
+  min-height: 360px;
+}
+
+.sidebar-visual-card p {
+  min-height: 120px;
+  border: 2px solid #6b4f3a;
+  border-radius: 12px;
+  background: #1A2B43;
+  color: white;
+  padding: 0.85rem;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: 12px;
+  color: #5b6676;
+}
+
+h1 {
+  margin: 0;
+  font-size: 44px;
+  letter-spacing: .04em;
+}
+
+h2 { margin: 8px 0 6px; color: #1A2B43; }
+
+.description { line-height: 1.5; }
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.room-grid section { padding: 12px; }
+
+.room-grid h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.meter {
+  height: 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  overflow: hidden;
+  border: 1px solid #8f6f48;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  background: #1A2B43;
+  transition: width .25s ease;
+}
+
+.progress {
+  margin: 6px 0 12px;
+  font-size: 13px;
+  color: #5b6676;
+}
+
+.message {
+  background: #1A2B43;
+  color: #ffffff;
+  padding: 14px;
+  min-height: 58px;
+  line-height: 1.45;
+}
+
+.clue-box {
+  padding: 12px 14px;
+}
+
+.clue-box summary {
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.clue-box li {
+  display: grid;
+  gap: 2px;
+  border-top: 1px solid #d8cbbd;
+  padding-top: 8px;
+}
+
+.clue-box li span {
+  color: #5b6676;
+  font-size: 13px;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+label {
+  grid-column: 1 / -1;
+  font-weight: bold;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #8f6f48;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #1A2B43;
+}
+
+button {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #1A2B43;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { filter: brightness(1.15); }
+
+.site-footer {
+  margin: 1.5rem auto 0;
+  padding: 1rem;
+  max-width: 1100px;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.site-footer button,
+.static-card button {
+  border: 2px solid #6b4f3a;
+  background: #1A2B43;
+  color: white;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+.static-page {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.static-card {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  border: 2px solid #6b4f3a;
+  border-radius: 16px;
+  background: white;
+  padding: 2rem;
+}
+
+.static-content {
+  width: 100%;
+  margin: 1rem auto 1.5rem;
+  line-height: 1.6;
+}
+
+.about-text > p:first-child {
+  text-align: center;
+}
+
+.about-text > ul,
+.about-text > p:not(:first-child) {
+  font-style: italic;
+}
+
+.about-text em {
+  font-style: normal;
+}
+
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; padding: 14px; }
+  h1 { font-size: 34px; }
+  .visual-card { min-height: 190px; }
+  .room-grid { grid-template-columns: 1fr; }
+}
