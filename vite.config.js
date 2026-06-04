@@ -3,5 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/the-westmoor-game/',
+//   base: '/the-westmoor-game/',
+  base: '/regency-text-adventure/',
 });
