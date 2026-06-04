@@ -580,7 +580,8 @@ My clues are "LADY" and "BIRD." A ladybird sounds like a promising thing.”`,
 }, [location]);
 
   useEffect(() => {
-    audioRef.current = new Audio('/music/westmoor-theme.m4a');
+    // audioRef.current = new Audio('/music/westmoor-theme.m4a');
+    audioRef.current = new Audio(`${import.meta.env.BASE_URL}music/westmoor-theme.m4a`);
     audioRef.current.loop = true;
 
     return () => {
@@ -1196,7 +1197,8 @@ function Checklist({ items, checked }) {
 const favicon = document.createElement('link');
 favicon.rel = 'icon';
 favicon.type = 'image/png';
-favicon.href = '/favicon.png';
+// favicon.href = '/favicon.png';
+favicon.href = `${import.meta.env.BASE_URL}favicon.png`
 
 document.head.appendChild(favicon);
 
