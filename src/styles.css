@@ -106,28 +106,46 @@ main {
   padding: 24px;
 }
 
-.visual-card {
+/* .visual-card { */
   /* min-height: 230px; */
-  background: #1A2B43;
-  color: #ffffff;
-  display: grid;
-  place-items: center;
-  padding: 28px;
-  border: 8px double #8f6f48;
-  margin: 10px 0 12px;
-}
+  /* background: #1A2B43; */
+  /* color: #ffffff; */
+  /* display: grid; */
+  /* place-items: center; */
+  /* padding: 28px; */
+  /* border: 8px double #8f6f48; */
+  /* margin: 10px 0 12px; */
+/* } */
 
-.visual-card p {
+/* .visual-card p {
   margin: 0;
   max-width: 52ch;
   text-align: center;
   font-size: 20px;
   line-height: 1.45;
+} */
+
+.visual-card {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.visual-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .sidebar-visual-card {
   /* min-height: 160px; */
   min-height: 360px;
+  /* min-height: 420px; */
 }
 
 .sidebar-visual-card p {
@@ -260,6 +278,36 @@ button {
 }
 
 button:hover { filter: brightness(1.15); }
+
+.music-section {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;    /* Centers vertically */
+}
+
+/* .visual-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+} */
+
+/* .visual-image {
+  width: 100%;
+  max-height: 240px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+} */
+
+.banner-image {
+  width: 50%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
 
 .site-footer {
   margin: 1.5rem auto 0;
