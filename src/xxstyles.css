@@ -37,55 +37,31 @@ main {
   position: relative;
   padding: 16px;
   gap: 12px;
-}
-
-/* Game header: title, summary boxes, and manor image */
-.game-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px;
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) 420px;
   align-items: start;
-  padding-top: 8px;
 }
 
-.game-header-left {
-  display: grid;
-  gap: 72px;
+/* Game header: title and manor image */
+.game-header {
+  display: contents;
 }
 
 .game-header h1 {
+  grid-column: 1;
+  grid-row: 1;
   margin: 0;
 }
 
-/* .game-hall-corner-image {
-  width: 240px;
-  height: 320px;
-  object-fit: cover;
-  object-position: center 48%;
-  border: 1px solid #8f6f48;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px #0001;
-} */
-
-/* .game-hall-corner-image {
-  width: 190px;
-  height: 320px;
-  object-fit: cover;
-  object-position: center 48%;
-  border: 1px solid #8f6f48;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px #0001;
-} */
-
 .game-hall-corner-image {
-  width: 190px;
-  height: 270px;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 100%;
+  height: 245px;
   object-fit: cover;
   object-position: center 48%;
   border: 1px solid #8f6f48;
   border-radius: 12px;
   box-shadow: 0 8px 20px #0001;
-  margin-top: -4px;
 }
 
 /* Shared card styling */
@@ -233,7 +209,7 @@ main {
 
 h1 {
   margin: 0;
-  font-size: 38px;
+  font-size: 36px;
   line-height: 1;
   letter-spacing: .04em;
 }
@@ -246,11 +222,16 @@ h2 {
 
 .description {
   line-height: 1.5;
+  grid-column: 1 / -1;
 }
 
 .room-text,
 .room-text p {
   line-height: 1.3;
+}
+
+.room-text {
+  grid-column: 1 / -1;
 }
 
 .room-text p {
@@ -259,31 +240,29 @@ h2 {
 
 /* People, objects, and places summary boxes */
 .room-grid {
+  grid-column: 1;
+  grid-row: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  margin: 12px 0 18px;
+  margin: 0;
 }
 
 .room-grid section {
   padding: 8px 10px;
-  min-height: 72px;
+  min-height: 68px;
 }
 
 .room-grid h3 {
   margin: 0 0 5px;
-  font-size: 15px;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: .12em;
-}
-
-.room-grid p {
-  font-size: 14px;
-  line-height: 1.25;
+  letter-spacing: .08em;
 }
 
 /* Progress meter */
 .meter {
+  grid-column: 1 / -1;
   height: 10px;
   border-radius: 999px;
   background: #ffffff;
@@ -299,6 +278,7 @@ h2 {
 }
 
 .progress {
+  grid-column: 1 / -1;
   margin: 4px 0 8px;
   font-size: 13px;
   color: #5b6676;
@@ -306,6 +286,7 @@ h2 {
 
 /* Main message area */
 .message {
+  grid-column: 1 / -1;
   background: #1A2B43;
   color: #ffffff;
   padding: 10px 12px;
@@ -323,6 +304,7 @@ h2 {
 
 /* Clue box */
 .clue-box {
+  grid-column: 1 / -1;
   padding: 12px 14px;
 }
 
@@ -346,6 +328,7 @@ h2 {
 
 /* Command form */
 form {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 8px;
@@ -379,48 +362,7 @@ button:hover {
   filter: brightness(1.15);
 }
 
-.command-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "label label"
-    "input button";
-  gap: 8px;
-  margin-top: 6px;
-  align-items: stretch;
-}
-
-.command-form label {
-  grid-area: label;
-}
-
-.command-form input#command {
-  grid-area: input;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-.command-form .command-submit {
-  grid-area: button;
-  width: auto;
-  min-width: 0;
-  align-self: stretch;
-  padding-inline: 16px;
-  white-space: nowrap;
-}
-
 /* Music controls */
-/* .music-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.music-button {
-  width: 100%;
-} */
-
 .music-section {
   display: flex;
   justify-content: center;
@@ -428,10 +370,7 @@ button:hover {
 }
 
 .music-button {
-  width: auto;
-  min-width: 9rem;
-  max-width: 100%;
-  padding-inline: 1.25rem;
+  width: 100%;
 }
 
 /* Banner images */
@@ -654,77 +593,22 @@ button:hover {
     font-size: 32px;
   }
 
-  /* .game-header {
-    grid-template-columns: minmax(0, 1fr) 180px;
+  .game {
+    grid-template-columns: minmax(0, 1fr) 170px;
     gap: 10px;
   }
 
   .game-hall-corner-image {
-    width: 180px;
-    height: 240px;
-  } */
-
-  .game-header {
-  grid-template-columns: minmax(0, 1fr) 150px;
-  gap: 10px;
-  padding-top: 6px;
-}
-
-.game-header-left {
-  gap: 48px;
-}
-
-.game-hall-corner-image {
-  width: 150px;
-  height: 210px;
-  margin-top: -2px;
-}
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 170px;
+    height: 125px;
+  }
 
   .room-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-column: 1;
+    grid-template-columns: 1fr;
   }
-
-  .room-grid p {
-    font-size: 13px;
-  }
-
-  .room-grid section {
-  min-width: 0;
-}
-
-/* added */
-
-.room-grid .places-wrap {
-  display: block;
-  max-width: 100%;
-  font-size: 14px;
-  line-height: 1.25;
-  white-space: normal;
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-.room-grid .places-token {
-  white-space: nowrap;
-}
-
-.room-grid .places-dot {
-  white-space: pre;
-}
-/* end of added */
-
-
-
-  /* .place-list {
-    font-size: 14px;
-    line-height: 1.25;
-  }
-
-  .place-item {
-    display: inline-block;
-    white-space: nowrap;
-    margin-right: 0.35rem;
-  } */
 
   .sidebar-visual-card .visual-image {
     max-height: 520px;
@@ -737,16 +621,19 @@ button:hover {
 
 /* Small screens */
 @media (max-width: 700px) {
-  .game-header {
+  .game {
     grid-template-columns: 1fr;
+  }
+
+  .game-header h1,
+  .room-grid,
+  .game-hall-corner-image {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .game-hall-corner-image {
     width: 100%;
     height: auto;
-  }
-
-  .room-grid {
-    grid-template-columns: 1fr;
   }
 }

@@ -1,9 +1,9 @@
 import { hints } from '../data/hints';
 
-export function HintsPage({ StaticPage, Footer, goToPage }) {
+export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
   return (
     <>
-      <StaticPage title="Hints" goToPage={goToPage}>
+      <StaticPage title="Hints" goToPage={goToPage} >
         <div className="hints-list">
           <p>Use these maps first. Then open each hint only as needed.</p>
 
@@ -55,7 +55,7 @@ export function HintsPage({ StaticPage, Footer, goToPage }) {
         </div>
       </StaticPage>
 
-      <Footer goToPage={goToPage} />
+      <Footer goToPage={goToPage} currentPage={currentPage} />
     </>
   );
 }

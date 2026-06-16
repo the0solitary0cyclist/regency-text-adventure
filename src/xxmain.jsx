@@ -302,33 +302,9 @@ const objectDetails = {
   },
   'manuscript': {
     image: 'IMAGE PLACEHOLDER: Fanfiction manuscript titled Carry On, with “Simone Snow” written over another name.',
-    // text: '<p><p>You have written other books since then, with Professor Piper’s encouragement, stories that did not have to borrow anyone else’s magic.</p>
-    
-    // A story inside a story - it\'s been a while since you\'ve written "Simon Snow" fanfiction.</p> <p>This manuscript bears the marks of your sister\'s red pen;<br /> some classic copyediting marks but many of her own design, intelligible only to you two.',
-     text: `<p><em>Carry On, Simon</em>: the magnum opus of your college years.</p>
-     <p>A story inside a story - it\'s been a while since you\'ve written "Simon Snow" fanfiction.</p></p>
-
-  <p>You have written original books since then, with the mentorship of your Creative Writing professor Gray Piper, but this is the work that made you a writer first.</p>
-
-
-  <p>This manuscript bears the marks of your sister's red pen;<br /> some classic copyediting marks, but many of her own design, intelligible only to you two.</p>`,
-  clue: 'fanfiction-thread',
+    text: '<p>A story inside a story - it\'s been a while since you\'ve written "Simon Snow" fanfiction.</p> <p>This manuscript bears the marks of your sister\'s red pen;<br /> some classic copyediting marks but many of her own design, intelligible only to you two.',
+    clue: 'fanfiction-thread',
     clueLabel: 'Carry On manuscript',
-    requiresPossession: false
-  },
-  'handkerchief': {
-    image: 'IMAGE PLACEHOLDER: A neatly folded white handkerchief, monogrammed in an unfamiliar hand.',
-    text: `<p>The small white handkerchief is embroidered in red with <em>C.A.</em>.</p>`,
-    clue: null,
-    clueLabel: null,
-    requiresPossession: false
-  },
-  'hairpins': {
-    image: 'IMAGE PLACEHOLDER: Three dark hairpins tucked into the lining of a reticule.',
-    text: `<p>Three hairpins, plain and practical.</p>
-    <p>These hairpins are no doubt meant to keep a respectable coiffure in place, but they look sturdy enough to assist in something less respectable.</p>`,
-    clue: null,
-    clueLabel: null,
     requiresPossession: false
   },
   'key': {
@@ -713,46 +689,6 @@ const formattedPoem = `
     return paperClueWords.every(clue => paperClues.includes(clue));
   }
 
-  function getPaperCluePrelude(characterKey) {
-    const character = dialogue[characterKey];
-
-    if (!character?.paperClue || paperClues.includes(character.paperClue)) {
-      return '';
-    }
-
-    const clueText = !hasHeardPaperClueRule && paperClueRules[characterKey]
-      ? paperClueRules[characterKey]
-      : `<p>${character.name} gives you a slip of paper marked <strong>“${character.paperClue}”</strong>.</p>`;
-
-    if (!hasHeardPaperClueRule && paperClueRules[characterKey]) {
-      setHasHeardPaperClueRule(true);
-    }
-
-    addPaperClue(character.paperClue);
-
-    const paperCluesAfterNewClue = [...paperClues, character.paperClue];
-
-    const hasAllPaperCluesNow = paperClueWords.every(clue =>
-      paperCluesAfterNewClue.includes(clue)
-    );
-
-    if (hasAllPaperCluesNow) {
-      return `
-        ${clueText}
-
-        <p>The slips of paper shift in your reticule.</p>
-
-        <p>Taken in order, they say very little. Taken otherwise, they seem almost willing to confess.</p>
-
-        <p>What phrase do they form?</p>
-
-        <p>Try: <strong>arrange [phrase]</strong></p>
-      `;
-    }
-
-    return clueText;
-  }
-
   function toggleMusic() {
     if (!audioRef.current) return;
 
@@ -988,49 +924,27 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    // if (found === 'trunk') {
-    //   if (!isTrunkUnlocked) {
-    //     write(`
-    //       <p>The trunk is locked.</p>
+    if (found === 'trunk') {
+      if (!isTrunkUnlocked) {
+        write(`
+          <p>The trunk is locked.</p>
 
-    //       <p>The brass key does not look as if it belongs to this sort of lock.</p>
+          <p>The brass key does not look as if it belongs to this sort of lock.</p>
 
-    //       <p>Perhaps you could <strong>use</strong> something else.</p>
-    //     `);
-    //     return;
-    //   }
+          <p>Perhaps you could <strong>use</strong> something else.</p>
+        `);
+        return;
+      }
 
-    //   write(`
-    //     <p>You try to lift the trunk.</p>
-
-    //     <p>It does not so much as dignify the attempt by shifting.</p>
-
-    //     <p>The trunk is unlocked now, but it is far too heavy to carry.</p>
-    //   `);
-    //   return;
-    // }
-
-  if (found === 'trunk') {
-    if (!isTrunkOpen()) {
       write(`
         <p>You try to lift the trunk.</p>
 
-        <p>It does not so much as dignify your attempt by shifting.</p>
+        <p>It does not so much as dignify the attempt by shifting.</p>
 
-        <p>It is heavy, and locked besides - not very useful.</p>
+        <p>The trunk is unlocked now, but it is far too heavy to carry.</p>
       `);
       return;
     }
-
-    write(`
-      <p>You try to lift the trunk.</p>
-
-      <p>It does not so much as dignify your attempt by shifting.</p>
-
-      <p>The trunk is unlocked now, but it is far too heavy to carry.</p>
-    `);
-    return;
-  }
 
     addItem(found);
     setRoomObjects(previous => ({
@@ -1107,41 +1021,7 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    if (characterKey === 'elizabeth' && item === 'correspondence') {
-      const paperCluePrelude = getPaperCluePrelude(characterKey);
-
-      completeGift(item, characterKey);
-
-      discover(
-        'elizabeth-jane-realization',
-        'Gave Jane’s correspondence to Elizabeth',
-        'Elizabeth remembers Jane'
-      );
-
-      write(`
-        ${paperCluePrelude}
-
-        <p>You give the correspondence to Elizabeth Bennet.</p>
-
-        <p>She receives it with composure, but the instant she recognizes the hand, all irony leaves her face.</p>
-
-        <p>“Jane,” she says softly.</p>
-
-        <p>She reads quickly at first, then more slowly, as if each line requires the courtesy of being believed.</p>
-
-        <p>“I have been very proud of my discernment,” Elizabeth says. “But it is possible to observe every folly in a room and still overlook the person who loves you best.”</p>
-
-        <p>She folds the letter with great care.</p>
-
-        <p>“Jane is not merely the gentle sister who waits at home. She is the reason there is a home to return to.”</p>
-      `);
-
-      return;
-    }
-
     if (characterKey === 'gwendolen' && item === 'cigarette case') {
-      const paperCluePrelude = getPaperCluePrelude(characterKey);
-
       completeGift(item, characterKey);
       // setVisualText(dialogue.natasha.image);
 
@@ -1151,10 +1031,7 @@ function getPeopleText(roomKey) {
         'Gwendolen remembers Cecily'
       );
 
-      write(`
-        ${paperCluePrelude}
-
-        <p>You give the cigarette case to Gwedolen.</p>
+      write(`<p>You give the cigarette case to Gwedolen.</p>
 
         <p>“Something something Cecily is my sister</p>”`);
 
@@ -1162,8 +1039,6 @@ function getPeopleText(roomKey) {
     }
 
     if (characterKey === 'natasha' && item === 'love letter') {
-      const paperCluePrelude = getPaperCluePrelude(characterKey);
-
       completeGift(item, characterKey);
       // setVisualText(dialogue.natasha.image);
 
@@ -1173,10 +1048,7 @@ function getPeopleText(roomKey) {
         'Natasha remembers Sonya'
       );
 
-      write(`
-        ${paperCluePrelude}
-
-        <p>You give the love letter to Natasha.<br />
+      write(`<p>You give the love letter to Natasha.<br />
 
       She reads the letter once quickly, then again, with care.</p>  
       <p>“This is not from Anatole,” she says.<br />
@@ -1191,8 +1063,6 @@ function getPeopleText(roomKey) {
     }
 
     if (characterKey === 'turtle' && item === 'ring') {
-      const paperCluePrelude = getPaperCluePrelude(characterKey);
-
       completeGift(item, characterKey);
 
       discover(
@@ -1202,8 +1072,6 @@ function getPeopleText(roomKey) {
       );
 
       write(`
-        ${paperCluePrelude}
-
         <p>You give the engagement ring to Turtle.</p>
 
         <p>You expect her to snatch it, in her excited way, but takes it slowly and turns it over in her palm.</p>
@@ -1227,8 +1095,6 @@ function getPeopleText(roomKey) {
     }
 
     if (characterKey === 'valjean' && item === 'candlesticks') {
-      const paperCluePrelude = getPaperCluePrelude(characterKey);
-
       completeGift(item, characterKey);
 
       discover(
@@ -1237,10 +1103,7 @@ function getPeopleText(roomKey) {
         'Valjean remembers sister'
       );
 
-      write(`
-        ${paperCluePrelude}
-
-        <p>Valjeanne takes the candlesticks carefully, as if they weigh even more than silver.</p>
+      write(`<p>Valjeanne takes the candlesticks carefully, as if they weigh even more than silver.</p>
 
       <p>“Everyone remembers Cosette, the child I saved.\n  
       But no one remembers the child I *tried* to save. My sister's child.\n  
@@ -1278,39 +1141,6 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    if (found === 'trunk') {
-      if (isTrunkOpen()) {
-        const manuscriptLocation = getManuscriptLocationStatus();
-
-        if (manuscriptLocation === 'inventory') {
-          write(`
-            <p>The trunk stands open.</p>
-
-            <p>It is old, heavy, and empty now. The manuscript is already in your reticule.</p>
-          `);
-          return;
-        }
-
-        if (manuscriptLocation === 'attic') {
-          write(`<p>The trunk stands open.</p>
-            <p>It is old and heavy, but no longer locked.</p>
-            <p>Inside lies a manuscript labeled <em>Carry On, Simon</em>.</p>
-          `);
-          return;
-        }
-
-        write(`
-          <p>The trunk stands open.</p>
-
-          <p>It is old, heavy, and empty.</p>
-        `);
-        return;
-      }
-
-      write(`<p>The old trunk is festooned with cobwebs. It is heavy, and, in spite of its age, securely locked.</p>`);
-      return;
-    }
-
     const detail = objectDetails[found];
     // setVisualText(detail.image);
     // ToDo deprecate required posession?
@@ -1337,7 +1167,7 @@ function getPeopleText(roomKey) {
       (normalized.includes('door') && location === 'greatHall');
 
     const isTryingTrunk =
-      normalized.includes('trunk');
+      normalized.includes('trunk') || location === 'attic';
 
     if (isTryingStudy) {
       if (location !== 'greatHall') {
@@ -1389,7 +1219,7 @@ function getPeopleText(roomKey) {
     }
 
     if (!isTryingTrunk) {
-      write(`<p>You try using it, but nothing <i>useful</i> happens.</p>`);
+      write(`<p>Use what, and on what?</p>`);
       return;
     }
 
@@ -1441,17 +1271,12 @@ function getPeopleText(roomKey) {
     }
 
     if (isUsingKey) {
-      if (!inventory.includes('key')) {
-        write(`
-          <p>You do not have a key.</p>
-        `);
-        return;
-      }
-
       write(`
         <p>You try the brass key in the trunk lock.</p>
 
-        <p>It will not turn. This key belongs to a larger lock.</p>
+        <p>It will not turn. This key belongs to a more formal door.</p>
+
+        <p>The little trunk lock wants something thinner.</p>
 
         <p>Perhaps you could <strong>use</strong> something else.</p>
       `);
@@ -1494,15 +1319,13 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    write(`<p>You try using it, but nothing <i>useful</i> happens.</p>`);
+    write(`
+      <p>The trunk is locked.</p>
 
-    // write(`
-    //   <p>The trunk is locked.</p>
+      <p>The brass key seems too large for it.</p>
 
-    //   <p>The brass key seems too large for it.</p>
-
-    //   <p>Perhaps you could <strong>use</strong> something </strong>on trunk</strong>.</p>
-    // `);
+      <p>Perhaps you could <strong>use</strong> something </strong>on trunk</strong>.</p>
+    `);
   }
 
   function parseGiveCommand(remainder) {
@@ -1551,21 +1374,34 @@ function getPeopleText(roomKey) {
 
     let response = foundClues.length >= 3 ? character.later : character.intro;
 
-    const paperCluePrelude = getPaperCluePrelude(key);
-
-    if (paperCluePrelude) {
-      response = paperCluePrelude;
+    if (key !== 'reynolds' && !hasHeardPaperClueRule) {
+      response = paperClueRules[key] || response;
+      setHasHeardPaperClueRule(true);
     }
 
-    write(response);
-  }
+ if (character.paperClue && !paperClues.includes(character.paperClue)) {
+  addPaperClue(character.paperClue);
 
-  function isTrunkOpen() {
-    return (
-      isTrunkUnlocked ||
-      inventory.includes('manuscript') ||
-      Object.values(roomObjects).some(objects => objects.includes('manuscript'))
-    );
+  const paperCluesAfterNewClue = [...paperClues, character.paperClue];
+
+  const hasAllPaperCluesNow = paperClueWords.every(clue =>
+    paperCluesAfterNewClue.includes(clue)
+  );
+
+  if (hasAllPaperCluesNow) {
+    response += `
+      <p>The slips of paper shift in your reticule.</p>
+
+      <p>Taken in order, they say very little. Taken otherwise, they seem almost willing to confess.</p>
+
+      <p>What phrase do they form?</p>
+
+      <p>Try: <strong>arrange [phrase]</strong></p>
+    `;
+  }
+}
+
+    write(response);
   }
 
   function getManuscriptLocationStatus() {
@@ -2016,75 +1852,34 @@ return (
 
 
     <section className="game">
-      <header className="game-header">
-  <div className="game-header-left">
-    <h1>The Westmoor Game</h1>
+      <header className="game-top">
+        <div className="game-top-left">
+          <h1>The Westmoor Game</h1>
 
-    <section className="room-grid" aria-label="Current room summary">
-      <section>
-        <h3>People</h3>
-        <p>{roomSummary.people.length ? roomSummary.people.join(' · ') : 'None'}</p>
-      </section>
+          <section className="summary-grid" aria-label="Current room summary">
+            <section className="summary-card">
+              <h2>People</h2>
+              <p>{roomSummary.people.length ? roomSummary.people.join(' · ') : 'None'}</p>
+            </section>
 
-      <section>
-        <h3>Objects</h3>
-        <p>{roomSummary.objects.length ? roomSummary.objects.join(' · ') : 'None'}</p>
-      </section>
+            <section className="summary-card">
+              <h2>Objects</h2>
+              <p>{roomSummary.objects.length ? roomSummary.objects.join(' · ') : 'None'}</p>
+            </section>
 
-      {/* <section>
-        <h3>Places</h3> */}
-        {/* <p>{roomSummary.exits.length ? roomSummary.exits.join(' · ') : 'None'}</p> */}
-      {/* </section> */}
-{/* <section>
-  <h3>Places</h3>
+            <section className="summary-card">
+              <h2>Places</h2>
+              <p>{roomSummary.exits.length ? roomSummary.exits.join(' · ') : 'None'}</p>
+            </section>
+          </section>
+        </div>
 
-  <p className="place-list">
-    {roomSummary.exits.length ? (
-      roomSummary.exits.map((place, index) => (
-        <span className="place-item" key={place}>
-          {place.replaceAll(' ', '\u00A0')}
-          {index < roomSummary.exits.length - 1 && '\u00A0·'}
-        </span>
-      ))
-    ) : (
-      'None'
-    )}
-  </p>
-</section> */}
-
-<section>
-  <h3>Places</h3>
-
-  <p className="places-wrap">
-    {roomSummary.exits.length ? (
-      roomSummary.exits.map((place, index) => (
-        <React.Fragment key={place}>
-          <span className="places-token">
-            {place.replaceAll(' ', '\u00A0')}
-          </span>
-
-          {index < roomSummary.exits.length - 1 && (
-            <>
-              <span className="places-dot"> · </span>
-              <wbr />
-            </>
-          )}
-        </React.Fragment>
-      ))
-    ) : (
-      'None'
-    )}
-  </p>
-</section>
-    </section>
-  </div>
-
-  <img
-    src={`${import.meta.env.BASE_URL}images/westmoor-hall.png`}
-    alt="Westmoor Hall"
-    className="game-hall-corner-image"
-  />
-</header>
+        <img
+          src={`${import.meta.env.BASE_URL}images/westmoor-hall.png`}
+          alt="Westmoor Hall"
+          className="game-hall-corner-image"
+        />
+      </header>
       {/* <div className="game-header">
         <h1>The Westmoor Game</h1>
 
@@ -2097,6 +1892,12 @@ return (
       {/* <h2>{room.title}</h2> */}
       {/* <HtmlText html={getRoomText(location)} className="room-text" /> */}
 
+      <div className="room-grid" aria-label="Current room contents">
+        <InfoBlock title="People" values={roomSummary.people} />
+        <InfoBlock title="Objects" values={roomSummary.objects} />
+        <InfoBlock title="Places" values={roomSummary.exits} />
+      </div>
+
       <div className="meter" aria-label={`Mystery progress ${progress}%`}><span style={{ width: `${progress}%` }}></span></div>
       <p className="progress">Clues: {foundClues.filter(clue => requiredClues.includes(clue)).length}/{requiredClues.length}</p>
 
@@ -2105,34 +1906,12 @@ return (
         <HtmlText html={message} />
       </div>
 
-      <form
-        className="command-form"
-        onSubmit={event => {
-          event.preventDefault();
-          handleCommand(command);
-        }}
-      >
-        <label htmlFor="command">Command</label>
 
-        <input
-          id="command"
-          autoFocus
-          value={command}
-          onChange={event => setCommand(event.target.value)}
-          placeholder={placeholderText}
-        />
-
-        <button className="command-submit" type="submit">
-          Enter
-        </button>
-      </form>
-
-
-      {/* <form onSubmit={event => { event.preventDefault(); handleCommand(command); }}>
+      <form onSubmit={event => { event.preventDefault(); handleCommand(command); }}>
         <label htmlFor="command">Command</label>
         <input id="command" autoFocus value={command} onChange={event => setCommand(event.target.value)} placeholder={placeholderText} />
         <button>Enter</button>
-      </form> */}
+      </form>
     </section>
     </main>
 
