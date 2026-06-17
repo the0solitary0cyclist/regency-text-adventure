@@ -1,3 +1,54 @@
+export const giftHints = [
+  {
+    character: 'Elizabeth Bennet',
+    steps: [
+      'Servants’ Passage',
+      'take correspondence',
+      'Drawing Room',
+      'give correspondence to Elizabeth'
+    ]
+  },
+  {
+    character: 'Gwendolen Fairfax',
+    steps: [
+      'Music Room',
+      'take cigarette case',
+      'Drawing Room',
+      'give cigarette case to Gwendolen'
+    ]
+  },
+  {
+    character: 'Natasha Rostova',
+    steps: [
+      'Drawing Room',
+      'take love letter',
+      'Music Room',
+      'give love letter to Natasha'
+    ]
+  },
+  {
+    character: 'Turtle Wexler',
+    steps: [
+      'Orangery',
+      'Garden',
+      'take ring',
+      'Library',
+      'give ring to Turtle'
+    ]
+  },
+  {
+    character: 'Jeanne Valjean',
+    steps: [
+      'Upper Landing',
+      'take candlesticks',
+      'Great Hall',
+      'Orangery',
+      'Garden',
+      'give candlesticks to Valjean'
+    ]
+  }
+];
+
 export const hints = [
   {
     title: 'How do I begin?',
@@ -23,17 +74,17 @@ export const hints = [
     ],
   },
   {
-    title: 'How do I find the brass key?',
+    title: 'How do I find the key?',
     lines: [
       'go servants passage',
-      'take brass key',
+      'take key',
     ],
   },
   {
     title: 'How do I unlock the Study?',
     lines: [
-      'go upper landing',
-      'unlock study with brass key',
+      'go great hall',
+      'unlock study with key',
       'go study',
     ],
   },
@@ -43,45 +94,6 @@ export const hints = [
       'go servants passage',
       'go attic',
       'use hairpins on trunk',
-    ],
-  },
-  {
-    title: 'What should I do with the manuscript?',
-    lines: [
-      'take carry on manuscript',
-      'examine carry on manuscript',
-    ],
-  },
-  {
-    title: 'What should I give to Natasha?',
-    lines: [
-      'take love note',
-      'go music room',
-      'give love note to natasha',
-    ],
-  },
-  {
-    title: 'What should I give to Gwendolen?',
-    lines: [
-      'take cigarette case',
-      'go drawing room',
-      'give cigarette case to gwendolen',
-    ],
-  },
-  {
-    title: 'What should I give to Turtle?',
-    lines: [
-      'take engagement ring',
-      'go library',
-      'give engagement ring to turtle',
-    ],
-  },
-  {
-    title: 'What should I give to Jeanne Valjean?',
-    lines: [
-      'take candlesticks',
-      'go garden',
-      'give candlesticks to valjean',
     ],
   },
   {
@@ -108,8 +120,8 @@ export const hints = [
   {
     title: 'What does the ending mean?',
     paragraphs: [
-      'Simone Snow is Cath. She has been unconscious after a car accident in the snow.',
-      'Wren has been beside her, telling and rewriting familiar stories so that the forgotten sisters become central: Sonya, Jane, Angela, Jeanne’s unnamed sister, and finally Wren herself.',
+      'Our avatar Simone Snow is writer Cath Avery (the protagonist of Rainbow Rowell\'s <em>Fangirl</em>). She has been unconscious after a car accident in the snow.',
+      'Her twin sister Wren has been beside her, telling and rewriting familiar stories so that the forgotten sisters become central: Sonya, Jane, Angela, Jeanne’s unnamed sister, and finally Wren herself.',
       'Lady Gray’s mystery leads Cath to recognize that the missing person in every rewritten story is the sister. Cath returns by sitting at the desk and writing the next chapter of her life, which begins when she wakes in the hospital to find Wren beside her and flowers from Professor Piper.',
     ],
   },

@@ -1,14 +1,14 @@
-import { hints } from '../data/hints';
+import { hints, giftHints } from '../data/hints';
 
 export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
   return (
     <>
-      <StaticPage title="Hints" goToPage={goToPage} >
+      <StaticPage title="Hints" goToPage={goToPage}>
         <div className="hints-list">
           <p>Use these maps first. Then open each hint only as needed.</p>
 
           <section className="map-section" aria-label="Navigation maps">
-{/* <pre className="text-map">{`GROUND FLOOR
+            {/* <pre className="text-map">{`GROUND FLOOR
 
 [DRAWING ROOM] -- [GREAT HALL] -- [STUDY]
                   /     |      \\
@@ -25,8 +25,8 @@ export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
         [MUSIC ROOM] [LIBRARY] [SERVANTS' PASSAGE]
                                       |
                                    [ATTIC]`}</pre> */}
-          
-          <pre className="text-map">{`WESTMOOR HALL
+
+            <pre className="text-map">{`WESTMOOR HALL
 
 [DRAWING ROOM] -- [GREAT HALL] -- [STUDY]
                   /     |   \\
@@ -36,6 +36,24 @@ export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
                     /        \\             
            [MUSIC ROOM]   [LIBRARY] `}</pre>
           </section>
+
+          <details>
+            <summary>What should I give to whom?</summary>
+
+            {giftHints.map(hint => (
+              <section key={hint.character} className="gift-hint">
+                <h3>{hint.character}</h3>
+
+                <ol>
+                  {hint.steps.map(step => (
+                    <li key={step}>
+                      <code>{step}</code>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+          </details>
 
           {hints.map(hint => (
             <details key={hint.title}>
