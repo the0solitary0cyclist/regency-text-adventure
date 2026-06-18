@@ -393,13 +393,9 @@ const dialogue = {
 
 const progressMilestones = [
   'false-name',
-  'earnest-revision',
-  'pride-revision',
-  'miserables-revision',
   'fanfiction-thread',
   'bird-in-hand',
   'gray-lady-newspaper',
-  'study-key',
   'wren-consulted',
   'paper-clue-answer',
   'elizabeth-jane-realization',
@@ -414,10 +410,6 @@ const progressMilestones = [
   'final-mystery-answered',
   'chapter-written',
 ];
-
-// const progressBarMilestones = progressMilestones.filter(
-//   milestone => !['final-mystery-answered', 'chapter-written'].includes(milestone)
-// );
 
 const progressBarMilestones = progressMilestones.filter(
   milestone => milestone !== 'final-mystery-answered'
