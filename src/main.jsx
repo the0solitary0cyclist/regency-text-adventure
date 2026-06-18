@@ -253,7 +253,7 @@ const objectDetails = {
      text: `<p><em>Carry On, Simon</em>: the magnum opus of your college years.</p>
      <p>A story inside a story - it’s been a while since you’ve written "Simon Snow" fanfiction.</p></p>
 
-  <p>You have written original books since then, with the mentorship of your Creative Writing professor Gray Piper, but this is the work that made you a writer first.</p>
+  <p>You have written original books since then, with the mentorship of your Fiction-Writing professor Gray Piper, but this is the work that made you a writer first.</p>
 
 
   <p>This manuscript bears the marks of your sister's red pen;<br /> some classic copyediting marks, but many of her own design, intelligible only to you two.</p>`,
@@ -384,7 +384,7 @@ const dialogue = {
   spectre: {
     name: cast.wren,
     aliases: ['spectre', 'the spectre', 'girl', 'wren', 'ghost'],
-    intro: '<p>The Spectre looks like you if you, if you were cast Fantine, with her short hair and gray tatters.</p> <p>“If I’m going to change the stories,” she says, “then I figure the least I can do is make you Simon, in a way.<br /> It’s a shame he doesn’t have a sister. It’s not like I can be Baz!” She makes a face.</br> “That’d be too weird.” ',
+    intro: '<p>The Spectre looks like you if you, if you were cast as Fantine, with her short hair and gray tatters.</p> <p>“If I’m going to change the stories,” she says, “then I figure the least I can do is make you Simon, in a way.<br /> It’s a shame he doesn’t have a sister. It’s not like I can be Baz!” She makes a face.</br> “That’d be too weird.” ',
     later: 'The haunting girl says, “I fixed them. I fixed us. You were asleep, and someone had to keep writing.”',
     clue: 'wren-consulted',
     clueLabel: 'The haunting speaks'
