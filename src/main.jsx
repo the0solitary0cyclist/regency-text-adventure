@@ -993,10 +993,15 @@ function App() {
       return;
     }
 
+    if (requested === location) {
+      write(`<p>You are already in the ${getRoomTitle(location)}.</p>`);
+      return;
+    }
+
     const exitMatch = Object.values(room.exits).includes(requested);
 
     if (!exitMatch) {
-      write(`You cannot reach the ${rooms[requested].title} from here.`);
+      write(`You cannot reach the ${getRoomTitle(requested)} from here.`);
       return;
     }
 
