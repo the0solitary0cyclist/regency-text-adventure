@@ -57,8 +57,7 @@ export function AboutPage({ StaticPage, Footer, goToPage, currentPage }) {
           </p>
 
           <p>
-            Credit to Alison Bechdel for the test that started so many conversations about
-            whether women in stories are allowed to matter to one another.
+            Credit to Alison Bechdel for <a href="https://en.wikipedia.org/wiki/Bechdel_test">The Bechdel Test</a>, which I wanted this project to ace.
           </p>
         </div>
       </StaticPage>

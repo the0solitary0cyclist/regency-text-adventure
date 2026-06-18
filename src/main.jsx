@@ -825,6 +825,12 @@ function App() {
       return;
     }
 
+    if (verb === 'hint' || verb === 'hints') {
+      goToPage('hints');
+      setCommand('');
+      return;
+    }
+
     if (verb === 'help') {
       const arrangeCommand = hasAllPaperClues()
       ? `
@@ -852,6 +858,7 @@ function App() {
     - give [object] to [person]<br />
     - use [object] on [object/place]<br />
     - unlock [object/place]<br />
+    - hint<br />
     ${arrangeCommand}<br />
     ${endingCommand}</p>
 
@@ -1189,7 +1196,7 @@ function App() {
         <p>“Cecily,” Gwendolen says. “Cecily is a very sweet name, and she is quite, quite perfect.”</p>
         <p>In my acquisition of the all-important Earnest it appears I have gained something more precious: a sister.<p> <p>I shall try to bear this with the dignity such good fortune deserves.”</p>
 
-        <p>Gwendolen walks away from you carrying the cigarette case rather tenderly.<br /> Before she reaches the door, she fades from view.</p>`);
+        <p>Gwendolen walks away from you carrying the cigarette case rather tenderly.<br /> She disappears as though she has walked into the wings.</p>`);
 
       return;
     }
@@ -1216,7 +1223,7 @@ function App() {
       “No. Of course it is not.<br />  
       My cousin. My friend. My sister.<br />  
       Sonya loved me before the comet, before the ball, before any man. <br /> 
-      She was not the obstacle to my love story. She was the person trying to keep me alive inside it.\n  
+      She was not the obstacle to my love story. Her love kept me alive.<br />  
       She is my dearest treasure, and the author of my future.”</p>
       <p>Natasha leaves with the letter held close. By the doorway, she fades like the last note of a song.</p>`);
 
@@ -1737,10 +1744,23 @@ function App() {
       : 'your companion';
 
     const characterText = `
-      <p>“Oh!” exclaims ${witness}. “But what does it mean? Surely not our gracious hostess?”</p>
+      <p>“Oh!” exclaims ${witness}. “But what does it mean??”</p>
 
       <p>“Oddly enough,” you reply, “I can think of several meanings...”</p>
     `;
+
+    if (normalizedGuess === 'attendtheladygray') {
+      write(`
+        ${guessText}
+
+        <p>The words nearly arrange themselves into sense.</p>
+
+        <p><strong>“ATTEND THE LADY GRAY”</strong> is plausible, perhaps even polite. But something suggests a slightly different order.</p>
+
+        <p>Try again.</p>
+      `);
+      return;
+    }
 
     if (normalizePaperClueGuess(guess) === paperClueAnswer) {
       discover('paper-clue-answer', 'Solved paper clues', 'Paper clue phrase');
@@ -2130,7 +2150,7 @@ function App() {
               There is not a moor for 50 miles or... more.
             </p>
             <p>You know <i>when</i> it must be: all candles, carriages, and careful manners.<br />
-            It is impossibly early for you to be here but, nevertheless, you know you are late.</p>
+            It is impossibly early for you to be here but, all the same, you know you are late.</p>
             <p>You do not recall <i>why</i> you are here, but at least you are dressed appropriately.<br />
                 You wear a pale muslin afternoon dress, and are neatly gloved, of course.<br />
     Your reticule hangs from your wrist containing a handkerchief, three hairpins, and no explanations whatsoever.</p>
