@@ -355,7 +355,7 @@ const dialogue = {
     clue: 'natasha-consulted',
     clueLabel: 'Natasha on forgiveness',
     paperClue: 'AT',
-    repeat: `Natasha says, “<p>I have been like you.</p> <p>I have felt the absence of one I love.<br />  
+    repeat: `<p>Natasha says, “I have been like you. I have felt the absence of one I love.<br />  
     And I too have been very ill.<br />  Heartsick, ashamed, and pale as a winter sky.<br />   
     <p>I yearn for a kind word, or better yet a love letter,<br />   
     a love letter,<br />   
