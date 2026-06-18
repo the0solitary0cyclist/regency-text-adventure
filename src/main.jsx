@@ -413,20 +413,61 @@ const progressMilestones = [
   'chapter-written',
 ];
 
+// const progressBarMilestones = progressMilestones.filter(
+//   milestone => !['final-mystery-answered', 'chapter-written'].includes(milestone)
+// );
+
 const progressBarMilestones = progressMilestones.filter(
-  milestone => !['final-mystery-answered', 'chapter-written'].includes(milestone)
+  milestone => milestone !== 'final-mystery-answered'
 );
 
 const TEST_ENDGAME = false;
 
+// function TEST_getFullProgressState() {
+//   return {
+//     location: 'study',
+//     inventory: ['handkerchief', 'hairpins'],
+//     paperClues: [...paperClueWords],
+//     foundClues: [...progressBarMilestones],
+//     clueSources: Object.fromEntries(
+//       progressBarMilestones.map(clue => [
+//         clue,
+//         {
+//           source: 'TEST',
+//           label: clue
+//         }
+//       ])
+//     ),
+//     visitedPlaces: Object.keys(rooms),
+//     hasHeardPaperClueRule: true,
+//     consultedPeople: [
+//       'reynolds',
+//       'elizabeth',
+//       'gwendolen',
+//       'natasha',
+//       'turtle',
+//       'valjean',
+//       'spectre',
+//     ],
+//     isTrunkUnlocked: true,
+//     isStudyUnlocked: true,
+//   };
+// }
+
+// const requiredInventoryForEnding = ['westing envelope', 'silver candlestick', 'twin notebook page', 'rewritten page'];
+
 function TEST_getFullProgressState() {
+  const completedMilestones = progressBarMilestones.filter(
+    milestone => milestone !== 'false-name'
+  );
+
   return {
     location: 'study',
     inventory: ['handkerchief', 'hairpins'],
     paperClues: [...paperClueWords],
-    foundClues: [...progressBarMilestones],
+    foundClues: completedMilestones,
     clueSources: Object.fromEntries(
-      progressBarMilestones.map(clue => [
+      completedMilestones.map(clue => [
         clue,
         {
           source: 'TEST',
@@ -449,8 +490,6 @@ function TEST_getFullProgressState() {
     isStudyUnlocked: true,
   };
 }
-
-// const requiredInventoryForEnding = ['westing envelope', 'silver candlestick', 'twin notebook page', 'rewritten page'];
 
 function HtmlText({ html, className = 'story-text' }) {
   return (
@@ -1832,6 +1871,13 @@ function App() {
       });
     }
 
+    if (!hasFound('false-name')) {
+      tasks.push({
+        label: 'You have not earnestly considered the name by which you were invited.',
+        hint: 'Examine the invitation in the Great Hall.'
+      });
+    }
+
     if (!hasFound('bird-in-hand')) {
       tasks.push({
         label: 'You’ve not received a clue of your own.',
@@ -1954,7 +2000,7 @@ function App() {
       “Yes.” you reply. “The birthright of each guest. A forgotten treasure within each story.”</p>
       <p>“Their sisters.”</p>
 
-      <p>Lady Gray smiles wryly. “Yes. You have found the meaning. But!”<br />
+      <p>Lady Gray smiles wryly. “Yes. You have found the <em>meaning</em>. But!”<br />
         “With another read, do you know the <i>answer</i>? Eight letters.”</p>
 
       <p>Try: <strong>answer [eight letters]</strong></p>

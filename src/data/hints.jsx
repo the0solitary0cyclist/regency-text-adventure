@@ -98,7 +98,7 @@ export const hints = [
     ],
   },
     {
-    title: 'What is the "answer" to the poem?',
+    title: 'What is the "answer" in the poem?',
     lines: [
       'CATHWREN',
     ],
