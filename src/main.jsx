@@ -395,7 +395,6 @@ const progressMilestones = [
   'false-name',
   'earnest-revision',
   'pride-revision',
-  'comet-revision',
   'miserables-revision',
   'fanfiction-thread',
   'bird-in-hand',
@@ -1321,7 +1320,34 @@ function App() {
   function examineItem(noun) {
     const found = findObject(noun, [...inventory, ...visibleObjects]);
     if (!found) {
-      write(`You find no useful detail for “${noun || 'that'}.”`);
+      const characterKey = findCharacter(noun);
+
+      if (characterKey) {
+        write(`<p>${dialogue[characterKey].name} is not an object to examine. Try: <strong>speak ${dialogue[characterKey].aliases[0]}</strong>.</p>`);
+        return;
+      }
+
+      const roomKey = findRoomKey(noun);
+
+      if (roomKey) {
+        if (roomKey === location) {
+          write(`
+            <p>You are already in the ${getRoomTitle(location)}.</p>
+
+            <p>Try: <strong>look</strong></p>
+          `);
+          return;
+        }
+
+        write(`
+          <p>${getRoomTitle(roomKey)} is a place, not an object to examine.</p>
+
+          <p>Try: <strong>go ${rooms[roomKey].aliases[0]}</strong></p>
+        `);
+        return;
+      }
+
+      write(`<p>You see no “${noun || 'that'}” here to examine.</p>`);
       return;
     }
 
@@ -1864,7 +1890,7 @@ function App() {
 
     if (!hasFound('fanfiction-thread')) {
       tasks.push({
-        label: 'The editor’s work has been forgotton.',
+        label: 'The editor’s work has been forgotten.',
         hint: 'The attic trunk is locked, but not every lock wants a key.'
       });
     }
