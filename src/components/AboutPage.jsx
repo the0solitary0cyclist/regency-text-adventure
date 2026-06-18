@@ -1,4 +1,24 @@
-// src/components/AboutPage.jsx
+function getFeedbackFormUrl() {
+  const baseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSewrmnbxP1unwqs1CYg9iWS3VnAHaEobXBIF2iWkvDLKQAPmQ/viewform?usp=pp_url';
+
+  const params = new URLSearchParams({
+    'entry.1586101946': getDiagnosticInfo(),
+  });
+
+  return `${baseUrl}&${params.toString()}`;
+}
+
+function getDiagnosticInfo() {
+  return [
+    // `URL: ${window.location.href}`,
+    `User agent: ${navigator.userAgent}`,
+    `Platform: ${navigator.userAgentData?.platform || navigator.platform || 'unknown'}`,
+    // `Language: ${navigator.language}`,
+    `Viewport: ${window.innerWidth} x ${window.innerHeight}`,
+    `Screen: ${window.screen.width} x ${window.screen.height}`,
+    `Timestamp: ${new Date().toISOString()}`,
+  ].join('\n');
+}
 
 export function AboutPage({ StaticPage, Footer, goToPage, currentPage }) {
   return (
@@ -60,6 +80,27 @@ export function AboutPage({ StaticPage, Footer, goToPage, currentPage }) {
             Credit to Alison Bechdel for <a href="https://en.wikipedia.org/wiki/Bechdel_test">The Bechdel Test</a>, which I wanted this project to ace.
           </p>
         </div>
+
+        <section className="about-section">
+  <h2>Feedback or Bug Report</h2>
+
+  <p>
+    Found a typo, broken command, confusing clue, layout issue, or something
+    you particularly liked?<br />
+  </p>
+
+  <p>
+    <a
+      className="story-link"
+      href={getFeedbackFormUrl()}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Send feedback or report a bug
+    </a>
+  </p>
+</section>
+        
       </StaticPage>
 
       <Footer goToPage={goToPage} currentPage={currentPage} />
