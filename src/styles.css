@@ -669,32 +669,6 @@ button:hover {
   margin-top: -2px;
 }
 
-/* .story-link {
-  color: white;
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-.story-link:visited {
-  color: white;
-}
-
-.story-link:hover,
-.story-link:focus {
-  color: white;
-  text-decoration: underline;
-} */
-
-/* .story-text a.story-link,
-.story-text a.story-link:visited,
-.story-text a.story-link:hover,
-.story-text a.story-link:focus,
-.story-text a.story-link:active {
-  color: white !important;
-  font-weight: bold;
-  text-decoration: underline;
-} */
-
   .room-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

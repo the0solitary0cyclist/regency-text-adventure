@@ -118,7 +118,7 @@ const rooms = {
     title: 'Garden',
     aliases: ['garden', 'rose garden'],
     image: `${import.meta.env.BASE_URL}images/rose-garden.png`,
-    text: `<p>The Garden blooms out of season, full of bright red roses.</p> <p>...Tea roses, first bred in 1867. Is it not 1811?<br /> The Garden blooms out of time...</p> <p>The fountain is dry, the path is wet - and holds two sets of identical footprints.</p>`,
+    text: `<p>The Garden blooms out of season, full of bright red roses.</p> <p>...Tea roses, first bred in 1867. Is it not 1811?<br /> The Garden blooms out of time...</p> <p>/The fountain is dry, the path is wet - and holds two sets of identical footprints.</p>`,
     exits: { 'Orangery': 'orangery' },
     objects: ['ring'],
     people: ['valjean']
@@ -149,8 +149,8 @@ const rooms = {
     title: 'Attic',
     aliases: ['attic', 'upper room', 'nursery'],
     image: `${import.meta.env.BASE_URL}images/attic.png`,
-    text: `<p>The attic is a Gothic cliché: sloped ceiling, narrow bed, cracked basin, and cobwebs arranged almost theatrically.</p>
-    <p>A blanket lies twisted on the bed, as though some pale, doomed child has only just been carried off.</p>`,
+    text: `<p>The attic is a Gothic cliché: sloped ceiling, narrow bed, cracked basin, and cobwebs arranged with almost theatrically.</p>
+    <p>A blanket lies twisted on the bed, as though some pale, doomed child has only just been carried offstage.</p>`,
     exits: { 'Servants’ Passage': 'servantsPassage' },
     objects: ['trunk'],
     people: ['spectre']
@@ -159,7 +159,7 @@ const rooms = {
     title: 'Lady Gray’s Study',
     aliases: ['study', 'locked study'],
     image: `${import.meta.env.BASE_URL}images/study.png`,
-    text: `<p>Behind the locked door is a modern study. A laptop, an ergonomic chair... and a quill pen.</p>`,
+    text: 'Behind the locked door is a modern study. A laptop, an ergonomic chair... and a quill pen.',
     exits: { 'Great Hall': 'greatHall' },
     objects: [],
     people: ['gray']
@@ -301,8 +301,8 @@ const objectDetails = {
   }
 };
 
-const paperClueAnswer = 'attendthegraylady';
-const paperClueWords = ['AT', 'TEND', 'THE', 'GRAY', 'LADY'];
+const paperClueAnswer = 'bewarethegraylady';
+const paperClueWords = ['BE', 'WARE', 'THE', 'GRAY', 'LADY'];
 const totalPaperClues = 5;
 
 const dialogue = {
@@ -319,7 +319,7 @@ const dialogue = {
     aliases: ['gray', 'lady gray', 'grey', 'lady grey'],
     image: 'IMAGE PLACEHOLDER: Lady Gray Westmoor — silver silk, black gloves, cane across her knees.',
     intro: `<p>“Lady Gray wears a gown that has made several concessions to the 21st century. She is half Regency mistress and half contemporary academic; somehow both warm and imperious.<br/>Her hazel eyes twinkle behind rainbow-patterned glasses. Her sleeves are rolled to the forearm, revealing the edge of a tattoo, and her fingers are stained with ink.</p> <p>“A bird in the hand,” she says. “What does that mean to you?“<p> “A bird in the hand is worth two... somewhere,“ you stammer in reply.</p> <p>“Good!“ encourages Lady Gray. “Do you know who is missing from your story?”</p>`,
-    later: `<p>“Lady Gray wears a gown that has made several concessions to the 21st century. She is half Regency mistress and half contemporary academic; somehow both warm and imperious.<br/>Her hazel eyes twinkle behind rainbow-patterned glasses. Her sleeves are rolled to the forearm, revealing the edge of a tattoo, and her fingers are stained with ink.</p> <p>“A bird in the hand,” she says. “What does that mean to you?“<p> “A bird in the hand is worth two... somewhere,“ you stammer in reply.</p> <p>“Good!“ encourages Lady Gray. “Do you know who is missing from your story?”</p>`,
+    intro: `<p>“Lady Gray wears a gown that has made several concessions to the 21st century. She is half Regency mistress and half contemporary academic; somehow both warm and imperious.<br/>Her hazel eyes twinkle behind rainbow-patterned glasses. Her sleeves are rolled to the forearm, revealing the edge of a tattoo, and her fingers are stained with ink.</p> <p>“A bird in the hand,” she says. “What does that mean to you?“<p> “A bird in the hand is worth two... somewhere,“ you stammer in reply.</p> <p>“Good!“ encourages Lady Gray. “Do you know who is missing from your story?”</p>`,
     clue: 'gray-warning',
     clueLabel: 'Lady Gray’s warning'
   },
@@ -354,7 +354,7 @@ const dialogue = {
     later: 'Natasha says, “Whoever changed it did not understand that sorrow is not the same thing as an ending.”',
     clue: 'natasha-consulted',
     clueLabel: 'Natasha on forgiveness',
-    paperClue: 'AT',
+    paperClue: 'BE',
     repeat: `Natasha says, “<p>I have been like you.</p> <p>I have felt the absence of one I love.<br />  
     And I too have been very ill.<br />  Heartsick, ashamed, and pale as a winter sky.<br />   
     <p>I yearn for a kind word, or better yet a love letter,<br />   
@@ -378,7 +378,7 @@ const dialogue = {
     later: 'Jeanne Valjean says, “Mercy changes a life. Control merely disguises itself as mercy.”',
     clue: 'valjean-consulted',
     clueLabel: 'Valjean on mercy',
-    paperClue: 'TEND',
+    paperClue: 'WARE',
     repeat: `<p>Jeanne Valjean says, “I am not who you would expect to see here, nor as you may expect to see me.</p> <p>I took another name to survive. I was Monsieur Madeleine, in reverence to Mary Magdalene; a sainted testament to second chances. That is all the more fitting considering I am a woman.”</p>`
   },
   spectre: {
@@ -413,43 +413,6 @@ const progressMilestones = [
   'final-mystery-answered',
   'chapter-written',
 ];
-
-const progressBarMilestones = progressMilestones.filter(
-  milestone => !['final-mystery-answered', 'chapter-written'].includes(milestone)
-);
-
-const TEST_ENDGAME = false;
-
-function TEST_getFullProgressState() {
-  return {
-    location: 'study',
-    inventory: ['handkerchief', 'hairpins'],
-    paperClues: [...paperClueWords],
-    foundClues: [...progressBarMilestones],
-    clueSources: Object.fromEntries(
-      progressBarMilestones.map(clue => [
-        clue,
-        {
-          source: 'TEST',
-          label: clue
-        }
-      ])
-    ),
-    visitedPlaces: Object.keys(rooms),
-    hasHeardPaperClueRule: true,
-    consultedPeople: [
-      'reynolds',
-      'elizabeth',
-      'gwendolen',
-      'natasha',
-      'turtle',
-      'valjean',
-      'spectre',
-    ],
-    isTrunkUnlocked: true,
-    isStudyUnlocked: true,
-  };
-}
 
 // const requiredInventoryForEnding = ['westing envelope', 'silver candlestick', 'twin notebook page', 'rewritten page'];
 
@@ -492,43 +455,48 @@ function findCharacter(input) {
 }
 
 function App() {
-  const testState = TEST_ENDGAME ? TEST_getFullProgressState() : null;
-
   const [page, setPage] = useState(() => {
     const hash = window.location.hash.replace('#/', '');
     return hash || 'intro';
   });
-  const [location, setLocation] = useState(testState?.location || START_ROOM);
-  const [inventory, setInventory] = useState(testState?.inventory || ['handkerchief', 'hairpins',]);
-  const [paperClues, setPaperClues] = useState(testState?.paperClues || []);
+  const [location, setLocation] = useState(START_ROOM);
+  const [inventory, setInventory] = useState(['handkerchief', 'hairpins',]);
+
+  // TEST
+  // const [paperClues, setPaperClues] = useState([]);
+  const [paperClues, setPaperClues] = useState([
+  'BE',
+  'WARE',
+  'THE',
+  'GRAY',
+]);
   const [roomObjects, setRoomObjects] = useState(() => Object.fromEntries(Object.entries(rooms).map(([key, room]) => [key, [...room.objects]])));
   const [roomPeople, setRoomPeople] = useState(() =>
     Object.fromEntries(
       Object.entries(rooms).map(([key, room]) => [key, [...room.people]])
     )
   );
-  const [foundClues, setFoundClues] = useState(testState?.foundClues || []);
-  const [clueSources, setClueSources] = useState(testState?.clueSources || {});
-  const [visitedPlaces, setVisitedPlaces] = useState(testState?.visitedPlaces || [START_ROOM]);
-  const [hasHeardPaperClueRule, setHasHeardPaperClueRule] = useState(testState?.hasHeardPaperClueRule || false);
-  const [consultedPeople, setConsultedPeople] = useState(testState?.consultedPeople || []);
-  const [visualText, setVisualText] = useState(testState ? rooms.study.image : rooms[START_ROOM].image);
-  const [visualImage, setVisualImage] = useState(testState ? rooms.study.image : rooms[START_ROOM].image);
+  const [foundClues, setFoundClues] = useState([]);
+  const [clueSources, setClueSources] = useState({});
+  const [visitedPlaces, setVisitedPlaces] = useState([START_ROOM]);
+  const [hasHeardPaperClueRule, setHasHeardPaperClueRule] = useState(false);
+  const [consultedPeople, setConsultedPeople] = useState([]);
+  const [visualText, setVisualText] = useState(rooms[START_ROOM].image);
+  const [visualImage, setVisualImage] = useState(rooms[START_ROOM].image);
   const [message, setMessage] = useState(START_MESSAGE);
   const [command, setCommand] = useState('');
-  const [isTrunkUnlocked, setIsTrunkUnlocked] = useState(testState?.isTrunkUnlocked || false);
-  const [isStudyUnlocked, setIsStudyUnlocked] = useState(testState?.isStudyUnlocked || false);
+  const [isTrunkUnlocked, setIsTrunkUnlocked] = useState(false);
+  const [isStudyUnlocked, setIsStudyUnlocked] = useState(false);
   const [placeholderExamples, setPlaceholderExamples] = useState([]);
   const [finalMysteryStep, setFinalMysteryStep] = useState(null);
-  const [finalMysteryMistakes, setFinalMysteryMistakes] = useState(0);
   const audioRef = useRef(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
   const room = rooms[location];
   const visibleObjects = roomObjects[location] || [];
   const peopleHere = roomPeople[location] || [];
-  const completedProgressMilestones = foundClues.filter(clue => progressBarMilestones.includes(clue)).length;
-  const progress = Math.round((completedProgressMilestones / progressBarMilestones.length) * 100);
+  const completedProgressMilestones = foundClues.filter(clue => progressMilestones.includes(clue)).length;
+  const progress = Math.round((completedProgressMilestones / progressMilestones.length) * 100);
   const formattedPoem = `
     <blockquote class="poem">
       <p>
@@ -557,12 +525,12 @@ function App() {
       `<p>“Miss Snow! We were wondering when you would arrive.<br />   
     It's a pity you missed luncheon; the oddest thing happened.<br />  
     Lady Gray read us a poem at luncheon.<br /> I shall tell you all! She said we would rediscover a treasure!<br /> She said:<br />` + formattedPoem +  `<p>Then she gave us each a clue. I think they must belong together somehow.<br />  
-    My clue is "AT". I don’t know what it could mean.”`,
+    My clue is "BE". I take this word to heart. To <i>be</i> can be quite painful, especially when you feel your life is over.”`,
 
     valjean:
       `<p>“Miss Snow, welcome. We were sorry to miss you at luncheon.<br />  
       Lady Gray gave a curious speech. She said:<br />`  + formattedPoem + `<p>Then she distributed slips of paper to the guests. She says we will rediscover a treasure.<br />  
-      My clue is "TEND." As the shepherd tends his flock.”</p>`,
+      My clue is "WARE." A reference to my garment business, perhaps.”</p>`,
 
     turtle:
       `<p>“Simone Snow! You missed lunch. I guess I'll catch you up.<br />  
@@ -574,7 +542,7 @@ function App() {
     gwendolen:
       `<p>“Miss Snow, there you are. It is a pity you missed luncheon; there was such an excitement!<br />  
     Lady Gray told us we would rediscover a treasure. She read us a poem.<br /> I shall tell you all! She said:<br />` + formattedPoem +  `<p>Then Lady Gray distributed paper clues to all the guests. I consider the entire arrangement wonderfully dramatic.  
-    But mine says "GRAY" how literally dull.<br /> I imagine you haven’t a clue of your own. Well, now you have mine, so that's a start.”</p>`
+    But mine says "GRAY" how literally dull.<br /> Don't you have one? Perhaps not yet. Well, now you have mine, so that's a start.”</p>`
   };
 
   const paperClueKnownRules = {
@@ -590,11 +558,10 @@ function App() {
 
       <p>“Then I will not tell it all again, though I could. I keep repeating the lines in my head.”</p>
 
-      <p>“My clue is <strong>“AT”</strong>. I don’t know what it could mean.”</p>`,
+      <p>“My clue is <strong>“BE”</strong>. It is a small word, but not a simple one.”</p>`,
 
     valjean:
-      `<p>“God keep you, Miss Snow,” Jeanne Valjean says. “You have heard, I trust, what happened at luncheon.”</p>
-      <p>I think it is only right to tell you; my clue is "TEND." As the shepherd tends his flock.”</p>`,
+      `<p>“God keep you, Miss Snow,” Jeanne Valjean says. “You have heard, I trust, what happened at luncheon.”</p>`,
 
     turtle:
       `<p>“Simone!” exclaims Turtle in greeting. ”So you already heard about lunch? Good. That saves time.”</p>
@@ -656,11 +623,6 @@ function App() {
   }
 
   function startGame() {
-    if (TEST_ENDGAME) {
-      goToPage('game');
-      return;
-    }
-
     setLocation(START_ROOM);
     setVisualImage(rooms[START_ROOM].image);
 
@@ -759,14 +721,6 @@ function App() {
     }
   }
 
-  function getRoomTitle(roomKey) {
-    if (roomKey === 'study' && finalMysteryStep === 'complete') {
-      return 'Saint Scholastica Hospital';
-    }
-
-    return rooms[roomKey].title;
-  }
-
   function getRoomImage(roomKey, objectsByRoom = roomObjects) {
     if (
       roomKey === 'upperLanding' &&
@@ -801,20 +755,8 @@ function App() {
     const verb = commandAliases[firstWord] || firstWord;
     const remainder = restWords.join(' ');
 
-    if (finalMysteryStep === 'poem-answer') {
-      answerLadyGrayPoem(verb === 'answer' ? remainder : text);
-      setCommand('');
-      return;
-    }
-
-    if (finalMysteryStep === 'poem-acrostic-answer') {
-      answerLadyGrayAcrostic(verb === 'answer' ? remainder : text);
-      setCommand('');
-      return;
-    }
-
     if (finalMysteryStep === 'missing-story') {
-      answerFinalMystery(verb === 'answer' ? remainder : text);
+      answerFinalMystery(text);
       setCommand('');
       return;
     }
@@ -989,7 +931,7 @@ function App() {
     const requested = findRoomKey(placeInput);
 
     if (!requested) {
-      write(`“${placeInput || 'That'}” is not a place you can go from here.`);
+      write(`No place named “${placeInput || 'there'}” comes into focus.`);
       return;
     }
 
@@ -1303,7 +1245,7 @@ function App() {
     );
     setInventory(previous => previous.filter(item => item !== found));
     setRoomObjects(previous => ({ ...previous, [location]: [...previous[location], found] }));
-    write(`Removed from reticule: ${found}. It is now in ${getRoomTitle(location)}.`);
+    write(`Removed from reticule: ${found}. It is now in ${room.title}.`);
   }
 
   function examineItem(noun) {
@@ -1377,7 +1319,7 @@ function App() {
       normalized.includes('trunk');
 
     if (isTryingStudy) {
-      if (!['greatHall', 'study'].includes(location)) {
+      if (location !== 'greatHall') {
         write(`
           <p>You are not standing by the Study door.</p>
         `);
@@ -1657,9 +1599,8 @@ function App() {
         return;
       }
 
-      setFinalMysteryStep('poem-answer');
-      setFinalMysteryMistakes(0);
-      write(getLadyGrayPoemQuestion());
+      setFinalMysteryStep('missing-story');
+      write(character.intro);
       return;
     }
 
@@ -1743,7 +1684,7 @@ function App() {
       write(`
         ${guessText}
 
-        <p>The paper slips settle into order: <strong>“ATTEND THE GRAY LADY.”</strong></p>
+        <p>The paper slips settle into order: <strong>“BEWARE THE GRAY LADY.”</strong></p>
 
         ${characterText}
       `);
@@ -1883,99 +1824,6 @@ function App() {
     `;
   }
 
-  function getLadyGrayPoemQuestion() {
-    return `
-      <p>Lady Gray wears a gown that has made several concessions to the 21st century.<br /> She is half Regency mistress and half contemporary academic; somehow both warm and imperious.<br />
-      Her hazel eyes twinkle behind rainbow-patterned glasses.<br /> From beneath her sleeve peeks the edge of a tattoo, and her fingers are stained with ink.</p>
-      
-      <p>“Simone!” she cries.“So glad you could <i>attend</i>.”<br />
-      “You have found the answer in my poem, I hope.”</p>
-
-      “Yes.” you reply. “The birthright of each guest. A forgotten treasure within each story.”</p>
-      <p>“Their sisters.”</p>
-
-      <p>Lady Gray smiles wryly. “Yes. You have found the meaning. But!”<br />
-        “With another read, do you know the <i>answer</i>? Eight letters.”</p>
-
-      <p>Try: <strong>answer [eight letters]</strong></p>
-    `;
-  }
-
-  function advanceToBirdInHandQuestion() {
-    setFinalMysteryStep('missing-story');
-    setFinalMysteryMistakes(0);
-  }
-
-  function answerLadyGrayPoem(answer) {
-    const normalizedAnswer = normalize(answer).replace(/\s+/g, '');
-
-    if (normalizedAnswer === 'cathwren') {
-      write(`
-        <p>You answer, “CATHWREN.”</p>
-
-        <p>Lady Gray smiles. “Yes. Cath and Wren. One name made of two names; two sisters made into one answer.”</p>
-
-        <p>“Knowing that,” she says, “what does <em>a bird in the hand</em> mean?”</p><p> “A bird in the hand is worth two... somewhere...,“ you stammer in reply.</p> <p>“Good!“ encourages Lady Gray. “Do you know who is missing from your story?”</p>`
-      );
-
-      advanceToBirdInHandQuestion();
-      return;
-    }
-
-    if (normalizedAnswer.includes('firstletter') && normalizedAnswer.includes('sentence')) {
-      write(`
-        <p>You say, “Type the first letter of each sentence.”</p>
-
-        <p>Lady Gray smiles. “Just so. And what do those first letters spell?”</p>
-
-        <p>Try: <strong>answer [eight letters]</strong></p>
-      `);
-
-      setFinalMysteryStep('poem-acrostic-answer');
-      return;
-    }
-
-    write(`
-      <p>You answer, “${answer}.”</p>
-
-      <p>Lady Gray considers how best to correct you.</p>
-
-      <p>“If you are still at a loss, you can always consult your <a class="story-link" href="#/hints" style="color: white; font-weight: bold; text-decoration: underline;">research</a>.”</p>
-
-      <p>“If I tell you to look for an acrostic, what do you see?”</p>
-
-      <p>Try: <strong>answer [eight letters]</strong></p>
-    `);
-
-    setFinalMysteryStep('poem-acrostic-answer');
-  }
-
-  function answerLadyGrayAcrostic(answer) {
-    const normalizedAnswer = normalize(answer).replace(/\s+/g, '');
-
-    if (normalizedAnswer === 'cathwren') {
-      write(`
-        <p>You answer, “CATHWREN.”</p>
-
-        <p>Lady Gray smiles. “Yes. Cath and Wren. One name made of two names; two sisters made into one answer.”</p>
-
-        <p>“Knowing that,” she says, “what does <em>a bird in the hand</em> mean?”</p>
-      `);
-    } else {
-      write(`
-        <p>You answer, “${answer}.”</p>
-
-        <p>Lady Gray shakes her head, not unkindly.</p>
-
-        <p>“The answer is <strong>CATHWREN</strong>.”</p>
-
-        <p>“Knowing that,” she says, “what does <em>a bird in the hand</em> mean?”</p>
-      `);
-    }
-
-    advanceToBirdInHandQuestion();
-  }
-
   function answerIncludesMissingSister(answer) {
     const normalized = normalize(answer);
 
@@ -1988,50 +1836,34 @@ function App() {
   }
 
   function answerFinalMystery(answer) {
-    function revealFinalMystery() {
-      discover('final-mystery-answered', 'Answered Lady Gray’s final question', 'Answered final mystery');
-      setFinalMysteryStep('write-ending');
-      setFinalMysteryMistakes(0);
-
+    if (!answerIncludesMissingSister(answer)) {
       write(`
-        <p>“The answer is the second, the bird, your twin sister, <i>Wren</i>,” says Lady Gray.</p>
+        <p>Lady Gray watches you with grave patience.</p>
 
-        <p>“You are, of course, novelist Cath Avery, twin sister to Wren Avery.</p>
-        <p>“There was a car accident,” Lady Gray says. “Another late-season Nebraska snow storm.”</p>
-        <p>“It's you who are missing. In the waking world, you are in the kind of melodramatic scenario that would make a writer wince.”</p>
-        <p>The red roses through the frosted window blur into brake lights.</p>
-        <p>“Wren has been by your side, telling you stories you know by heart. But!<br /> Ever the editor, she has altered them.<br /> She promoted the sisters in stories that have undervalued them.<br /> Sonya beside Natasha. Jane beside Elizabeth. Angela beside Turtle. Jean as Jeanne, with the beloved sister Victor Hugo never even bothered to name!”</p>
-        <p>“Wren has been calling you back with her stories.”</p>
+        <p>“You have heard my clues. What is your birthright? Not a fortune. Not a husband.”</p>
 
-        <p>Lady Gray indicates the chair with a sweep of her hand.</p>
-        <p>The desk waits. The paper is blank. Lady Gray holds out her quill pen.</p>
-        <p>“Sit,” Lady Gray says, “and write the next chapter of your life.”</p>
-        <p>Try: <strong>write next chapter</strong></p>
+        <p>“A bird in the hand,” she says again. “Who has been beside you all along?”</p>
       `);
-    }
 
-    if (answerIncludesMissingSister(answer)) {
-      revealFinalMystery();
       return;
     }
 
-    const nextMistakeCount = finalMysteryMistakes + 1;
-
-    if (nextMistakeCount >= 3) {
-      revealFinalMystery();
-      return;
-    }
-
-    setFinalMysteryMistakes(nextMistakeCount);
+    discover('final-mystery-answered', 'Answered Lady Gray’s final question', 'Answered final mystery');
+    setFinalMysteryStep('write-ending');
 
     write(`
-      <p>Lady Gray regards you patiently.</p>
+      <p>“Yes,” Lady Gray says. “Your twin sister, Wren.”</p>
 
-      <p>“Not quite,” she says. “The key is that there are two. And you are one of two.”</p>
+      <p>“There was a car accident,” Lady Gray says. “Another late-season Nebraska snow storm.”</p>
+      <p>“It's you who are missing. In the waking world, you are in the kind of melodramatic scenario that would make a writer wince.”</p>
+      <p>The red roses through the frosted window blur into brake lights.</p>
+      <p>“Wren has been by your side, been telling you stories you know by heart. But!<br /> Ever the editor, she has altered them.<br /> She promoted the sisters in stories that have undervalued them.<br /> Sonya beside Natasha. Jane beside Elizabeth. Angela beside Turtle. Jean as Jeanne, with the beloved sister Victor Hugo never even bothered to name!”</p>
+      <p>“Wren has been calling you back with her stories.”</p>
 
-      <p>“A bird in the hand,” she says again. “Who has been beside you all along?”</p>
-
-      <p>${3 - nextMistakeCount} ${3 - nextMistakeCount === 1 ? 'guess remains' : 'guesses remain'}.</p>
+      <p>Lady Gray indicates the chair with a sweep of her hand.</p>
+      <p>The desk waits. The paper is blank. Lady Gray holds out her quill pen.</p>
+      <p>“Sit,” Lady Gray says, “and write the next chapter of your life.”</p>
+      <p>Try: <strong>write next chapter</strong></p>
     `);
   }
 
@@ -2046,11 +1878,11 @@ function App() {
 
     if (!isWriting) {
       write(`
-        <p>The paper waits.</p>
+        <p>The desk waits.</p>
 
-        <p>Lady Gray says, “There are no more riddles. Just write.”</p>
+        <p>Lady Gray says, “Not by solving now. By choosing. Sit at the desk. Write.”</p>
 
-        <p>Try: <strong>write next chapter</strong></p>
+        <p>Try: <strong>write chapter</strong></p>
       `);
 
       return;
@@ -2091,7 +1923,7 @@ function App() {
   }
 
   function writeEnding() {
-    if (location !== 'study') {
+    if (location !== 'lockedStudy') {
       write('The ending must be written in Lady Gray’s study, where the altered pages have gathered.');
       return;
     }
@@ -2101,9 +1933,9 @@ function App() {
       return;
     }
 
-    setFinalMysteryStep('poem-answer');
-    setFinalMysteryMistakes(0);
-    write(getLadyGrayPoemQuestion());
+    setLocation('ending');
+    setVisualText(rooms.ending.image);
+    write('Cath Avery wakes with ink on her hand. Wren is asleep across the room, one page of Cath’s story folded beneath her cheek. On the page, Lady Gray has written: “Revision is not resurrection, but love may learn to ask permission.”');
   }
 
   if (page === 'intro') {
@@ -2121,14 +1953,25 @@ function App() {
 
           <div className="intro-blurb">
             <p>
-              Westmoor Hall stands east of the village and west of nothing at all.<br/ > 
-              There is not a moor for 50 miles or... more.
+              Westmoor Hall stands east of the village and west of nothing at all. There is not a moor for 50 miles or... more.
             </p>
-            <p>You know <i>when</i> it must be: all candles, carriages, and careful manners.<br />
-            It is impossibly early for you to be here but, nevertheless, you know you are late.</p>
-            <p>You do not recall <i>why</i> you are here, but at least you are dressed appropriately.<br />
+            <p>You do not recall why you are here, but at least you are dressed appropriately.<br />
                 You wear a pale muslin afternoon dress, and are neatly gloved, of course.<br />
     Your reticule hangs from your wrist containing a handkerchief, three hairpins, and no explanations whatsoever.</p>
+            {/* <p>
+              Westmoor Hall stands east of the village and west of nothing at all.
+              You arrive late, underdressed for certainty and overdressed for explanation.
+            </p>
+
+            <p>
+              Lady Gray has promised a treasure, the guests are guarding scraps of paper,
+              and every familiar story seems to have been revised by an anxious hand.
+            </p>
+
+            <p>
+              Find what has been rewritten. Ask who is missing. Then decide whether
+              the ending is yours to write.
+            </p> */}
           </div>
 
           <button type="button" onClick={startGame}>
@@ -2198,8 +2041,8 @@ return (
             <p className="paper-clues-list">
               <strong>Guests' clues:</strong>{' '}
               {foundClues.includes('paper-clue-answer') ? (
-                <span style={{ fontWeight: 'bold' }}>
-                  ATTEND THE GRAY LADY
+                <span style={{ color: 'red', fontWeight: 'bold' }}>
+                  BEWARE THE GRAY LADY
                 </span>
               ) : (
                 paperClues.join(', ')
@@ -2227,17 +2070,22 @@ return (
       </section>
 
       <section className="side-card sidebar-visual-card" aria-label="Current story image placeholder">
-        <h2>{getRoomTitle(location)}</h2>
+        <h2>{room.title}</h2>
           <img
             src={visualImage}
             alt={rooms[location].title}
             className="visual-image"
           />
+        {/* <p>{visualImage}</p> */}
+        {/* <p>{visualText}</p> */}
+        {/* <button type="button" onClick={startMusic}>Start music</button>
+        <button type="button" onClick={stopMusic}>Stop music</button> */}
       </section>
 
       <section className='music-section'>
         <button
           type="button"
+          // className="inventory-button"
           className="music-button"
           onClick={toggleMusic}
         >
@@ -2321,7 +2169,7 @@ return (
   />
 </header>
       <div className="meter" aria-label={`Story progress ${progress}%`}><span style={{ width: `${progress}%` }}></span></div>
-      <p className="progress">Story Progress: {completedProgressMilestones}/{progressBarMilestones.length}</p>
+      <p className="progress">Story Progress: {completedProgressMilestones}/{progressMilestones.length}</p>
 
       <div className="message" aria-live="polite">
         <HtmlText html={message} />
@@ -2348,6 +2196,13 @@ return (
           Enter
         </button>
       </form>
+
+
+      {/* <form onSubmit={event => { event.preventDefault(); handleCommand(command); }}>
+        <label htmlFor="command">Command</label>
+        <input id="command" autoFocus value={command} onChange={event => setCommand(event.target.value)} placeholder={placeholderText} />
+        <button>Enter</button>
+      </form> */}
     </section>
     </main>
 

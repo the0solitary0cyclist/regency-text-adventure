@@ -108,7 +108,7 @@ export const hints = [
   {
     title: 'What does the ending mean?',
     paragraphs: [
-      'Our avatar Simone Snow is writer Cather Avery (the protagonist of Rainbow Rowell\'s <em>Fangirl</em>). She has been unconscious after a car accident in the snow.',
+      'Our avatar Simone Snow is writer Cather Avery (the protagonist of Rainbow Rowell\'s "Fangirl"). She has been unconscious after a car accident in the snow.',
       'Her twin sister Wren has been beside her, telling and rewriting familiar stories so that the forgotten sisters become central: Sonya, Jane, Angela, Jeanne’s unnamed sister, and finally Wren herself.',
       'Lady Gray’s mystery leads Cath to recognize that the missing person in every rewritten story is the sister. Cath returns by sitting at the desk and writing the next chapter of her life, which begins when she wakes in the hospital to find Wren beside her and flowers from Professor Piper.',
     ],
