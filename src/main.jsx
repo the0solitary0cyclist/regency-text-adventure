@@ -2184,8 +2184,8 @@ function App() {
               Westmoor Hall stands east of the village and west of nothing at all.<br/ > 
               There is not a moor for 50 miles or... more.
             </p>
-            <p>You know <i>when</i> it must be: all candles, carriages, and careful manners.<br />
-            It is impossibly early for you to be here but, all the same, you know you are late.</p>
+            <p>You know <i>when</i> it must be: a time of candles, carriages, and careful manners.<br />
+            It is impossibly early for <i>you</i> to be here but, all the same, you know you are late.</p>
             <p>You do not recall <i>why</i> you are here, but at least you are dressed appropriately.<br />
                 You wear a pale muslin afternoon dress, and are neatly gloved, of course.<br />
     Your reticule hangs from your wrist containing a handkerchief, three hairpins, and no explanations whatsoever.</p>
