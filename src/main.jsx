@@ -109,7 +109,7 @@ const rooms = {
     title: 'Music Room',
     aliases: ['music room', 'ballroom', 'comet room'],
     image: `${import.meta.env.BASE_URL}images/music-room.png`,
-    text: `<p>A square pianoforte repeats one unfinished phrase whenever no one is looking.</p> <p>The invisible hand at the keys is more mysterious than musical.</p>`,
+    text: `<p>A pianoforte repeats one unfinished phrase whenever no one is looking.</p> <p>The invisible hand at the keys is more mysterious than musical.</p>`,
     exits: { 'Upper Landing': 'upperLanding' },
     objects: ['sheet music', 'cigarette case'],
     people: ['natasha']
@@ -393,9 +393,6 @@ const dialogue = {
 
 const progressMilestones = [
   'false-name',
-  'earnest-revision',
-  'pride-revision',
-  'miserables-revision',
   'fanfiction-thread',
   'bird-in-hand',
   'gray-lady-newspaper',
@@ -1110,7 +1107,7 @@ function App() {
       `Took: ${found}`,
       `Took ${found}`
     );
-    discover(objectDetails[found]?.clue, `Took: ${found}`, objectDetails[found]?.clueLabel);
+    // discover(objectDetails[found]?.clue, `Took: ${found}`, objectDetails[found]?.clueLabel);
 
     setRoomObjects(previous => {
     const nextRoomObjects = {
