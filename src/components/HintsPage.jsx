@@ -1,4 +1,5 @@
-import { hints, giftHints } from '../data/hints';
+// import { hints, giftHints } from '../data/hints';
+import { hints, giftHints } from '../data/hints.jsx';
 
 export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
   return (

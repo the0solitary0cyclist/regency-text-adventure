@@ -63,7 +63,7 @@ export const hints = [
   {
     title: 'How should the clues be arranged?',
     lines: [
-      'arrange beware the gray lady',
+      'arrange attend the gray lady',
     ],
   },
   {
@@ -84,11 +84,23 @@ export const hints = [
       'use hairpin on trunk',
     ],
   },
+    {
+    title: 'Who is the gray lady?',
+    paragraphs: [
+      'Lady Gray, the Spectre in the attic, the newspaper, our ill protagonist – take your pick. All should be "attended."',
+    ],
+  },
   {
     title: 'How do I reach the final mystery?',
     lines: [
       'go study',
       'speak gray',
+    ],
+  },
+    {
+    title: 'What is the "answer" to the poem?',
+    lines: [
+      'CATHWREN',
     ],
   },
   {
@@ -108,9 +120,11 @@ export const hints = [
   {
     title: 'What does the ending mean?',
     paragraphs: [
-      'Our avatar Simone Snow is writer Cather Avery (the protagonist of Rainbow Rowell\'s "Fangirl"). She has been unconscious after a car accident in the snow.',
-      'Her twin sister Wren has been beside her, telling and rewriting familiar stories so that the forgotten sisters become central: Sonya, Jane, Angela, Jeanne’s unnamed sister, and finally Wren herself.',
-      'Lady Gray’s mystery leads Cath to recognize that the missing person in every rewritten story is the sister. Cath returns by sitting at the desk and writing the next chapter of her life, which begins when she wakes in the hospital to find Wren beside her and flowers from Professor Piper.',
+    <>
+      <p>Our avatar Simone Snow is writer Cather Avery, the protagonist of Rainbow Rowell's <em>Fangirl</em>. She has been unconscious after a car accident in the snow.</p>  
+      <p>Her twin sister Wren has been beside her, telling and rewriting familiar stories so that the forgotten sisters become central: Sonya, Jane, Angela, Jeanne’s unnamed sister, and finally Wren herself.</p>
+      <p>Lady Gray’s mystery leads Cath to recognize that the missing person in every rewritten story is the sister. Cath returns by sitting at the desk and writing the next chapter of her life, which begins when she wakes in the hospital to find Wren beside her and flowers from Professor Piper.</p>
+    </>
     ],
   },
 ];

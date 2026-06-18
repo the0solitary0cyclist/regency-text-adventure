@@ -1407,11 +1407,9 @@ function App() {
 
       if (!isUsingKey) {
         write(`
-          <p>The Study door remains locked, despite your efforts.</p>`
+          <p>The Study door remains locked, despite your efforts.</p>
+          <p>Perhaps Lady Gray's poem is a suggestion to <em>use</em> a key...</p>`
 
-          // <p>Perhaps Lady Gray's poem is incentive to use a key...</p>
-
-          // <p>Try: <strong>unlock study with brass key</strong></p>
         );
         return;
       }
@@ -1612,12 +1610,23 @@ function App() {
     }
 
     if (isTryingTrunk) {
+      const isUsingHairpin =
+        normalized.includes('hairpin') || normalized.includes('hairpins');
+
+      if (!isUsingHairpin) {
+        write(`
+          <p>The trunk, despite your efforts, remains locked.</p>
+          <p>Perhaps you could <strong>use</strong> something else.</p>
+        `);
+        return;
+      }
+
       useItem('hairpins on trunk');
       return;
     }
 
     write(`
-      <p>You are not sure what you mean to unlock.</p>
+      <p>It is unclear what you mean to unlock.</p>
     `);
   }
 
@@ -1749,7 +1758,7 @@ function App() {
       <p>“Oddly enough,” you reply, “I can think of several meanings...”</p>
     `;
 
-    if (normalizedGuess === 'attendtheladygray') {
+    if (normalizePaperClueGuess(guess) === 'attendtheladygray') {
       write(`
         ${guessText}
 
