@@ -5,7 +5,7 @@ export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
     <>
       <StaticPage title="Hints" goToPage={goToPage}>
         <div className="hints-list">
-          <p>Use these maps first. Then open each hint only as needed.</p>
+          <p>Consult the resources, and open each hint only as needed.</p>
 
           <section className="map-section" aria-label="Navigation maps">
             {/* <pre className="text-map">{`GROUND FLOOR
@@ -35,6 +35,23 @@ export function HintsPage({ StaticPage, Footer, goToPage, currentPage }) {
         [GARDEN]  [UPPER LANDING]        [ATTIC]
                     /        \\             
            [MUSIC ROOM]   [LIBRARY] `}</pre>
+          </section>
+
+          <section className="hint-section">
+            <h2>Lady Gray’s Poem</h2>
+
+            <blockquote className="poem">
+                <p>
+                <em>Called souls assemble, names are read,</em><br />
+                <em>as white snow crowns the roses red,</em><br />
+                <em>the key is turned by trembling hand,</em><br />
+                <em>her shadow falls on house and land.</em><br />
+                <em>Wake, dear heart, and claim your due:</em><br />
+                <em>receive the birthright kept for you.</em><br />
+                <em>Estates may pass by trust and deed; but!</em><br />
+                <em>nothing’s clear with just one read.</em>
+                </p>
+            </blockquote>
           </section>
 
           <details>

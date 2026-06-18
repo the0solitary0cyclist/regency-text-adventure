@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { HintsPage } from './components/HintsPage';
+import { AboutPage } from './components/AboutPage';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
-// import { startMusic, stopMusic } from "./music";
 
 const START_ROOM = 'greatHall';
 
@@ -22,6 +22,9 @@ const commandAliases = {
   leave: 'remove',
   i: 'inventory',
   inv: 'inventory',
+  reticule: 'inventory',
+  bag: 'inventory',
+  purse: 'inventory',
   talk: 'speak',
   ask: 'speak',
   go: 'go',
@@ -35,7 +38,7 @@ const commandAliases = {
   offer: 'give',
   hand: 'give',
   use: 'use',
-  unlock: 'use',
+  // unlock: 'use',
   open: 'use'
 };
 
@@ -76,62 +79,47 @@ const rooms = {
     aliases: ['upper landing', 'landing', 'stairs', 'staircase'],
     // image: 'IMAGE PLACEHOLDER: Upper Landing — white banister, dim portraits, a corridor branching toward the gallery and attic.',
     image: `${import.meta.env.BASE_URL}images/upper-landing.png`,
-    text: 'The upper landing looks down upon the Great Hall. From here the house seems less like a home than a set of shelves for stories.',
+    text: '<p>The Upper Landing looks down upon the Great Hall.</p> <p>The expanse of snow-white marble, the watchful women in the portraits, and the curve of the stairs make the whole house feel like it is wrapped around an absence.</p>',
+    // text: 'The upper landing looks down upon the Great Hall. From here the house seems less like a home than a set of shelves for stories.',
     exits: {
       'Great Hall': 'greatHall',
       'Music Room': 'musicRoom',
       'Library': 'library',
       'Servants\' Passage': 'servantsPassage',
-      // 'East Wing': 'eastWing',
-      // 'West Wing': 'westWing',
-      // 'North Gallery': 'northGallery',
-      // 'Attic': 'attic'
     },
     objects: ['candlesticks'],
     people: []
   },
-  // eastWing: {
   drawingRoom: {
-    // title: 'East Wing Drawing Room',
     title: 'Drawing Room',
-    // aliases: ['east wing', 'drawing room', 'east drawing room'],
     aliases: ['drawing room'],
-    // image: 'IMAGE PLACEHOLDER: East Wing — white tea table, sofa, embroidery basket, and a chair set slightly apart.',
     image: `${import.meta.env.BASE_URL}images/drawing-room.png`,
     text: '<p>A tea service waits for twice as many guests as could possibly be present in the house.</p>',
     exits: { 'Great Hall': 'greatHall' },
     objects: ['love letter'],
     people: ['gwendolen', 'elizabeth']
   },
-  // westWing: {
   library: {
-    // title: 'West Wing Library',
     title: 'Library',
-    // aliases: ['west wing', 'library', 'west library'],
     aliases: ['library'],
-    // image: 'IMAGE PLACEHOLDER: West Wing Library — legal ledgers, family trees, and a locked white glass bookcase.',
     image: `${import.meta.env.BASE_URL}images/library.png`,
     text: 'The library smells of leather, ink, and... cup noodles? Someone has sorted the shelves into Romance, Revolution, Inheritance, and Fanfiction.',
     exits: { 'Upper Landing': 'upperLanding' },
-    // objects: ['darcy letter', 'westing envelope', 'newspaper'],
     objects: ['newspaper', 'book'],
     people: ['turtle']
-    // people: ['turtle', 'thenardierOne', 'thenardierTwo']
   },
   musicRoom: {
     title: 'Music Room',
     aliases: ['music room', 'ballroom', 'comet room'],
-    // image: 'IMAGE PLACEHOLDER: Music Room — chandelier, abandoned sheet music, comet painted across the white ceiling.',
     image: `${import.meta.env.BASE_URL}/images/music-room.png`,
     text: 'A piano repeats one unfinished phrase whenever no one is looking. The ceiling comet seems to have been painted over another sky.',
-    exits: { 'Great Hall': 'greatHall'},
+    exits: { 'Upper Landing': 'upperLanding' },
     objects: ['sheet music', 'cigarette case'],
     people: ['natasha']
   },
   garden: {
     title: 'Garden',
     aliases: ['garden', 'rose garden'],
-    // image: 'IMAGE PLACEHOLDER: South Garden — wet gravel paths, white roses, locked gate, moonlit fountain.',
     image: `${import.meta.env.BASE_URL}images/rose-garden.png`,
     text: `<p>The Garden blooms out of season, full of bright red roses.<br /> Tea roses, first bred in 1867. Is it not 1811?<br /> The Garden blooms out of time.<br /> The fountain is dry, the path is wet - and holds two sets of identical footprints.</p>`,
     exits: { 'Orangery': 'orangery' },
@@ -141,9 +129,7 @@ const rooms = {
   orangery: {
     title: 'Orangery',
     aliases: ['orangery', 'conservatory', 'greenhouse', 'glasshouse'],
-    // image: 'IMAGE PLACEHOLDER: Orangery — white orange blossoms, tall windows, citrus trees in painted tubs, a writing desk hidden behind leaves.',
     image: `${import.meta.env.BASE_URL}images/orangery.png`,
-    // image: `${import.meta.env.BASE_URL}orangery-snow.png`,
     text: `<p>The citrus fruits glow upon the boughs all around, their scents upon the air.<br />  
     The air...has a surprising chill. Outside, a view into the rose garden.<br />  
     Snow is falling, slowly wiping color from the world.<br />  
@@ -151,60 +137,43 @@ const rooms = {
     <em>"WAKE"</em>`,
     exits: { 'Great Hall': 'greatHall', 'Garden': 'garden'},
     objects: ['hand mirror'],
-    // objects: ['notebook', 'hand mirror'],
     people: []
   },  
-  // northGallery: {
-  //   title: 'North Gallery',
-  //   aliases: ['north gallery', 'gallery', 'portrait gallery'],
-  //   image: 'IMAGE PLACEHOLDER: North Gallery — portraits of women whose faces flicker between painted and blank.',
-  //   // text: 'Portraits line the North Gallery. In one are seated two young women in red mantuas, holding fast to one another. They have differing expressions and yet they share a face. One holds a goblet, the other a pen.',
-  //   exits: { 'Upper Landing': 'upperLanding', 'Attic': 'attic' },
-  //   objects: ['blank portrait'],
-  //   people: ['wren']
-  // },
   servantsPassage: {
     title: 'Servants\' Passage',
     aliases: ['servants passage', 'servants hall', 'passage', 'corridor', 'servants\' passage', 'servants\' hall'],
-    // image: 'IMAGE PLACEHOLDER: Servants Passage — bells, narrow stairs, laundry basket full of crossed-out pages.',
     image: `${import.meta.env.BASE_URL}images/servants-passage.png`,
-    text: 'The servants\' passage runs behind the formal rooms. Here the house drops its manners and shows its seams.',
+    text: 'The servants\' passage runs behind the formal and family rooms, forming unseen connections between them.',
     exits: { 'Great Hall': 'greatHall', 'Upper Landing': 'upperLanding', 'Attic': 'attic' },
-    // objects: ['rewritten page'],
     objects: ['key', 'correspondence'],
     people: []
   },
   attic: {
     title: 'Attic',
     aliases: ['attic', 'upper room', 'nursery'],
-    // image: 'IMAGE PLACEHOLDER: Attic — trunks, school papers, theater costumes, and a cracked dorm-room mirror.',
     image: `${import.meta.env.BASE_URL}images/attic.png`,
     text: 'The attic should belong to the house, but it has the air of a dorm room after finals: books open, clothes abandoned, pages everywhere.',
     exits: { 'Servants\' Passage': 'servantsPassage' },
     objects: ['trunk'],
-    // objects: ['carry on manuscript'],
     people: ['spectre']
   },
   study: {
-    title: 'Lady Gray’s Locked Study',
-    aliases: ['study', 'locked study', 'lady gray study'],
-    // image: 'IMAGE PLACEHOLDER: Locked Study — gray desk, seven labeled drawers, manuscript pages pinned like evidence.',
+    title: 'Lady Gray’s Study',
+    aliases: ['study', 'locked study'],
     image: `${import.meta.env.BASE_URL}images/study.png`,
-    text: 'Behind the locked door is a modern study. A laptop, an ergonomic chair. Leaning on her desk with a modern nonchalance is Lady Gray.',
+    text: 'Behind the locked door is a modern study. A laptop, an ergonomic chair... and a quill pen. Leaning on her desk with a modern nonchalance is Lady Gray.',
     exits: { 'Great Hall': 'greatHall' },
-    // objects: ['final manuscript'],
     objects: [],
     people: ['gray']
   },
-  ending: {
-    title: 'The Edge of Waking',
-    aliases: ['ending'],
-    image: 'IMAGE PLACEHOLDER: Ending — Westmoor Hall overlaid with a dorm room, two sisters, one notebook.',
-    text: 'The house thins into paper. The borrowed name loosens. Another name waits underneath.',
-    exits: {},
-    objects: [],
-    people: []
-  }
+  // ending: {
+  //   title: 'The Edge of Waking',
+  //   aliases: ['ending'],
+  //   text: 'The house thins into paper. The borrowed name loosens. Another name waits underneath.',
+  //   exits: {},
+  //   objects: [],
+  //   people: []
+  // }
 };
 
 const objectDetails = {
@@ -212,12 +181,8 @@ const objectDetails = {
     image: 'IMAGE PLACEHOLDER: An invitation addressed to “Miss Simone Snow,” the ink changing midway through.',
     text: `<p>The invitation requests “Miss Simon<em>e</em> Snow” at Westmoor Hall. <br />A second hand has inserted the "E". Some conscientious proofreading assistant, no doubt.<br />
     That name is more familiar than your own.</p>`, 
-    // <p>You do not recall why you are here, but at least you are dressed appropriately.<br />
-    // You wear a pale muslin afternoon dress, and are neatly gloved.  
-    // Your reticule hangs from your wrist containing a handkerchief, three hairpins, and no explanations whatsoever.</p>`,
     clue: 'false-name',
     clueLabel: 'False-name invitation',
-    requiresPossession: false
   },
   'cigarette case': {
     image: 'IMAGE PLACEHOLDER: Silver cigarette case engraved “From little Cecily, with her fondest love.”',
@@ -225,7 +190,6 @@ const objectDetails = {
     text: '<p>When you open the  cigarette case you see it is engraved:</p> <p><i>"‘From little Cecily with her fondest love."</i></p>',
     clue: 'earnest-revision',
     clueLabel: 'Earnest false identity',
-    requiresPossession: false
   },
   'ring': {
     image: 'IMAGE PLACEHOLDER: An invitation addressed to “Miss Simone Snow,” the ink changing midway through.',
@@ -234,14 +198,23 @@ const objectDetails = {
     It is undeniably lovely but its shine is strangely cold, somehow.</p>`,  
     clue: 'engagement-ring',
     clueLabel: 'engagement-ring',
-    requiresPossession: false
   },
   'correspondence': {
     image: 'IMAGE PLACEHOLDER: Long folded letter beginning “Be not alarmed, madam,” with later sentences crossed out.',
-    text: `I am truly glad, dearest Lizzy, that you have been spared something of these distressing scenes; but now, as the first shock is over, shall I own that I long for your return? I am not so selfish, however, as to press for it, if inconvenient. Adieu. I take up my pen again to do what I have just told you I would not, but circumstances are such, that I cannot help earnestly begging you all to come here as soon as possible.`,
+    text: `<p>This letter is from Jane Bennet. Courtesy argues against reading it. The hurried hand, however, argues more persuasively that you should find its intended recipient.</p>
+    <blockquote>
+    <p>
+      <em>I am truly glad, dearest Lizzy, that you have been spared something of these distressing scenes; but now, as the first shock is over, shall I own that I long for your return?</em>
+    </p>
+    <p>
+      <em>I am not so selfish, however, as to press for it, if inconvenient. Adieu.</em>
+    </p>
+    <p>
+      <em>I take up my pen again to do what I have just told you I would not, but circumstances are such, that I cannot help earnestly begging you all to come here as soon as possible.</em>
+    </p>
+  </blockquote>`,
     clue: 'pride-revision',
     clueLabel: 'Pride and Prejudice letter',
-    requiresPossession: false
   },
   'sheet music': {
     image: 'IMAGE PLACEHOLDER: A piece of sheet music',
@@ -256,18 +229,15 @@ const objectDetails = {
 
     clue: 'comet-revision',
     clueLabel: 'Comet program revision',
-    // requiresPossession: false
   },
   'trunk': {
-    image: 'IMAGE PLACEHOLDER: A heavy old trunk in the attic, its lock scratched by many failed attempts.',
+    // image: 'IMAGE PLACEHOLDER: A heavy old trunk in the attic, its lock scratched by many failed attempts.',
     text: `<p>The trunk is old, heavy, and locked.</p>`,
-    // <p>The lock is small enough that a proper key almost feels like the wrong idea.</p>,
-    clue: null,
-    clueLabel: null,
-    requiresPossession: false
+    clue: 'examined-trunk',
+    clueLabel: 'Examined trunk',
   },
   'book': {
-    image: 'IMAGE PLACEHOLDER: Westing-style envelope with chess notation, stock ticker marks, and a clue cut in half.',
+    // image: 'IMAGE PLACEHOLDER: Westing-style envelope with chess notation, stock ticker marks, and a clue cut in half.',
     text: `<p>Grimms' Fairy Tales.</p> 
     <p>You open to an old favorite: </p>
     <blockquote>
@@ -281,38 +251,52 @@ const objectDetails = {
     </blockquote>`,
     clue: 'grimms',
     clueLabel: 'Grimm',
-    requiresPossession: false
   },
   'candlesticks': {
-    image: 'IMAGE PLACEHOLDER: Pair of silver candlesticks, one real and one only sketched in pencil.',
+    // image: 'IMAGE PLACEHOLDER: Pair of silver candlesticks, one real and one only sketched in pencil.',
     text: `<p>Two large candlesticks of massive silver stand on a narrow mahogany table.<br />  
     They have been polished; you can see yourself reflected in each.</p>`,
     clue: 'miserables-revision',
     clueLabel: 'Valjean candlestick',
-    requiresPossession: false
   },
   'hand mirror': {
-    image: 'IMAGE PLACEHOLDER: A silver hand mirror on the Orangery writing desk, its glass dark around the edges.',
+    // image: 'IMAGE PLACEHOLDER: A silver hand mirror on the Orangery writing desk, its glass dark around the edges.',
     text: `<p>Your hair is is dressed à la grecque, but your face is unexpectedly ashen.</p>  
     <p>The mirror reflects the orange trees, the steamed glass, and a woman standing behind you.<br />  
     When you turn, no one is there.</p>`,
     clue: 'wrong-reflection',
     clueLabel: 'Wrong reflection',
-    requiresPossession: false
   },
   'manuscript': {
-    image: 'IMAGE PLACEHOLDER: Fanfiction manuscript titled Carry On, with “Simone Snow” written over another name.',
-    text: '<p>A story inside a story - it\'s been a while since you\'ve written "Simon Snow" fanfiction.</p> <p>This manuscript bears the marks of your sister\'s red pen;<br /> some classic copyediting marks but many of her own design, intelligible only to you two.',
-    clue: 'fanfiction-thread',
+    // image: 'IMAGE PLACEHOLDER: Fanfiction manuscript titled Carry On, with “Simone Snow” written over another name.',    
+     text: `<p><em>Carry On, Simon</em>: the magnum opus of your college years.</p>
+     <p>A story inside a story - it\'s been a while since you\'ve written "Simon Snow" fanfiction.</p></p>
+
+  <p>You have written original books since then, with the mentorship of your Creative Writing professor Gray Piper, but this is the work that made you a writer first.</p>
+
+
+  <p>This manuscript bears the marks of your sister's red pen;<br /> some classic copyediting marks, but many of her own design, intelligible only to you two.</p>`,
+  clue: 'fanfiction-thread',
     clueLabel: 'Carry On manuscript',
-    requiresPossession: false
+  },
+  'handkerchief': {
+    image: 'IMAGE PLACEHOLDER: A neatly folded white handkerchief, monogrammed in an unfamiliar hand.',
+    text: `<p>The small white handkerchief is embroidered in red with <em>C.A.</em>.</p>`,
+    clue: 'examined-handkerchief',
+    clueLabel: 'Examined handkerchief',
+  },
+  'hairpins': {
+    image: 'IMAGE PLACEHOLDER: Three dark hairpins tucked into the lining of a reticule.',
+    text: `<p>Three hairpins, plain and practical.</p>
+    <p>These hairpins are no doubt meant to keep a respectable coiffure in place, but they look sturdy enough to assist in something less respectable.</p>`,
+    clue: 'examined-hairpins',
+    clueLabel: 'Examined hairpins',
   },
   'key': {
     image: 'IMAGE PLACEHOLDER: Brass key tagged “Lady Gray’s Study,” casting two shadows.',
     text: '<p>A tarnished brass key, befitting an old house with old secrets.<br />Good manners would forbid a guest from taking it.<br />But then, good manners are for people who know why they have been invited.</p>',
     clue: 'study-key',
     clueLabel: 'Study key',
-    requiresPossession: false
   },
   'newspaper': {
     image: 'IMAGE PLACEHOLDER: A folded New York Times arts page, damp at the edges as though brought in from snow.',
@@ -323,7 +307,6 @@ const objectDetails = {
     <p>The print fades before your eyes as though obscured by snow.</p>`,
     clue: 'gray-lady-newspaper',
     clueLabel: 'Gray Lady newspaper',
-    requiresPossession: false
   },
 'love letter': {
   image: 'IMAGE PLACEHOLDER: A love letter folded into the sheet music, its seal cracked and its signature blurred.',
@@ -333,19 +316,18 @@ const objectDetails = {
   I will hold you back by force.<br />  
   I will stand here outside your door.<br />  
   I won't see you disgraced.<br />  
-  I will protect your name and your heart.</p>
+  I will protect your name and your heart,<br />
+  because I miss my friend.</p>
   </blockquote>
-  <p>Here, surely, is a love letter.</p>`,
+  <p>Although the sentiment may not be romantic, here, surely, is a love letter.</p>`,
   clue: 'love-letter',
   clueLabel: 'Natasha love letter',
-  requiresPossession: false
 },
   'final manuscript': {
     image: 'IMAGE PLACEHOLDER: Final manuscript pages, some careful, some reckless, all waiting for an ending.',
     text: '',
     clue: 'final-proof',
     clueLabel: 'Final proof',
-    requiresPossession: false
   }
 };
 
@@ -357,7 +339,7 @@ const dialogue = {
   reynolds: {
     name: cast.reynolds,
     aliases: ['reynolds', 'mrs reynolds', 'housekeeper'],
-    image: 'IMAGE PLACEHOLDER: Mrs. Reynolds the housekeeper',
+    // image: 'IMAGE PLACEHOLDER: Mrs. Reynolds the housekeeper',
     intro: '“Welcome Miss Snow. Although I fear if you have arrived here, that means someone is missing.”',
     // later: `“Since you missed the luncheon the mistress says I am meant to give you a clue of your own, whatever that means.  
     // She says "A bird in the hand." I hope it means something to you, as it mean nought to me.”`,
@@ -367,7 +349,7 @@ const dialogue = {
   },
   gray: {
     name: cast.gray,
-    aliases: ['gray', 'lady gray', 'westmere', 'lady gray westmere'],
+    aliases: ['gray', 'lady gray', 'grey', 'lady grey'],
     image: 'IMAGE PLACEHOLDER: Lady Gray Westmoor — silver silk, black gloves, cane across her knees.',
     // intro: '“Names are useful until they become cages,” Lady Gray says. “Find what has been rewritten. Then ask who benefits from a story becoming less itself.”',
     // later: '“I am not the author of this damage,” Lady Gray says. “I am merely old enough to know when a story is being forced.”',
@@ -381,7 +363,7 @@ const dialogue = {
   elizabeth: {
     name: cast.elizabeth,
     aliases: ['elizabeth', 'lizzy', 'elizabeth bennet', 'bennet'],
-    image: 'IMAGE PLACEHOLDER: Elizabeth Bennet — standing by the tea table, letter folded like a weapon.',
+    // image: 'IMAGE PLACEHOLDER: Elizabeth Bennet — standing by the tea table, letter folded like a weapon.',
     intro: 'Elizabeth Bennet studies you with amused suspicion. “The house is full of people being improved against their will. I cannot recommend it.”',
     later: 'Elizabeth says, “A misunderstanding can be instructive. A rewriting is only rude.”',
     clue: 'elizabeth-consulted',
@@ -391,7 +373,7 @@ const dialogue = {
   gwendolen: {
     name: cast.gwendolen,
     aliases: ['gwendolen', 'gwendolen fairfax', 'fairfax'],
-    image: 'IMAGE PLACEHOLDER: Gwendolen Fairfax — immaculate gloves, silver cigarette case, wounded dignity.',
+    // image: 'IMAGE PLACEHOLDER: Gwendolen Fairfax — immaculate gloves, silver cigarette case, wounded dignity.',
     intro: 'Gwendolen Fairfax snaps the cigarette case shut. “I am prepared to forgive a false name. I am not prepared to forgive bad editing.”',
     later: 'Gwendolen says, “Someone has mistaken complication for wit. A common but devastating error.”',
     clue: 'gwendolen-consulted',
@@ -400,8 +382,8 @@ const dialogue = {
   },
   natasha: {
     name: cast.natasha,
-    aliases: ['natasha', 'natasha rostova', 'rostova'],
-    image: 'IMAGE PLACEHOLDER: Natasha Rostova — beneath the painted comet, holding a program with trembling hands.',
+    aliases: ['natasha', 'natasha rostova', 'rostova', 'natalie', 'natalia'],
+    // image: 'IMAGE PLACEHOLDER: Natasha Rostova — beneath the painted comet, holding a program with trembling hands.',
     intro: `“I have been like you. I have felt the absence of one I love.  
     And I too have been very ill. Heartsick, ashamed, and pale as a winter sky.  
     I yearn for a kind word, or better yet a love letter,  
@@ -414,8 +396,8 @@ const dialogue = {
   },
   turtle: {
     name: cast.turtle,
-    aliases: ['turtle', 'turtle wexler', 'wexler'],
-    image: 'IMAGE PLACEHOLDER: Turtle Wexler — seated on a library ladder, envelope open, braid like a challenge.',
+    aliases: ['turtle', 'turtle wexler', 'wexler', 'tabitha', 'tabitha wexler'],
+    // image: 'IMAGE PLACEHOLDER: Turtle Wexler — seated on a library ladder, envelope open, braid like a challenge.',
     intro: 'Turtle Wexler waves the envelope. “The clues are inconsistent. That means either the puzzle is bad, or someone tampered with the rules.”',
     later: 'Turtle says, “I like games. I hate being played.”',
     clue: 'turtle-consulted',
@@ -425,7 +407,7 @@ const dialogue = {
   valjean: {
     name: cast.valjean,
     aliases: ['jeanne', 'jeanne valjean', 'valjean'],
-    image: 'IMAGE PLACEHOLDER: Jeanne Valjean — in the garden with silver candlesticks and a guarded, merciful face.',
+    // image: 'IMAGE PLACEHOLDER: Jeanne Valjean — in the garden with silver candlesticks and a guarded, merciful face.',
     intro: "Jeanne Valjean says, “I am not who you would expect to see here, nor as you may expect to see me. I took another name to survive. But at least I wrote my own story. I was Monsieur Madeleine, in reverence to Mary Magdalene; a sainted testament to second chances. It's all the more fitting considering I am a woman. Perhaps these candlesticks can shine some light upon the mysteries in your life.”",    
     later: 'Jeanne Valjean says, “Mercy changes a life. Control merely disguises itself as mercy.”',
     clue: 'valjean-consulted',
@@ -434,8 +416,8 @@ const dialogue = {
   },
   spectre: {
     name: cast.wren,
-    aliases: ['ghost', 'girl', 'wren', 'spectre'],
-    image: 'IMAGE PLACEHOLDER: The haunting girl — seen in a mirror, almost the protagonist, almost not.',
+    aliases: ['spectre', 'girl', 'wren', 'ghost'],
+    // image: 'IMAGE PLACEHOLDER: The haunting girl — seen in a mirror, almost the protagonist, almost not.',
     intro: '<p>A gray woman lingers in the room.<br /> You do not fear her, although she is transparent and has your face.</p><p>“If I’m going to change the stories,” she says, “then I figure the least I can do is make you Simon.<br /> It’s a shame he doesn’t have a sister. It\'s not like I can be Baz!” She makes a face.</br> “That\'d be too weird.” ',
     // intro: 'The haunting girl appears at the end of the gallery. She has the wrong stillness for a ghost. “You were taking too long,” she says, then vanishes.',
     later: 'The haunting girl says, “I fixed them. I fixed us. You were asleep, and someone had to keep writing.”',
@@ -444,21 +426,25 @@ const dialogue = {
   }
 };
 
-const requiredClues = [
+const progressMilestones = [
   'false-name',
   'earnest-revision',
   'pride-revision',
   'comet-revision',
-  'westing-revision',
   'miserables-revision',
-  'wren-thread',
-  'haunting',
-  'rewriting',
   'fanfiction-thread',
   'study-key',
-  'final-proof',
   'wren-consulted',
-  // 'thenardier-double'
+  'paper-clue-answer',
+  'elizabeth-jane-realization',
+  'gwendolen-cecily-realization',
+  'natasha-sonya-realization',
+  'turtle-angela-ring-realization',
+  'valjean-sister-realization',
+  'trunk-unlocked',
+  'study-unlocked',
+  'final-mystery-answered',
+  'chapter-written',
 ];
 
 const requiredInventoryForEnding = ['westing envelope', 'silver candlestick', 'twin notebook page', 'rewritten page'];
@@ -542,21 +528,22 @@ function App() {
   const room = rooms[location];
   const visibleObjects = roomObjects[location] || [];
   const peopleHere = roomPeople[location] || [];
-  const progress = Math.round((foundClues.filter(clue => requiredClues.includes(clue)).length / requiredClues.length) * 100);
-const formattedPoem = `
-  <blockquote class="poem">
-    <p>
-      <em>Called souls assemble, names are read,</em><br />
-      <em>as white snow crowns the roses red,</em><br />
-      <em>the key is turned by trembling hand,</em><br />
-      <em>her shadow falls on house and land.</em><br />
-      <em>Wake, dear heart, and claim your due:</em><br />
-      <em>receive the birthright kept for you.</em><br />
-      <em>Estates may pass by trust and deed; but!</em><br />
-      <em>nothing’s clear with just one read.</em>
-    </p>
-  </blockquote>
-`;
+  const completedProgressMilestones = foundClues.filter(clue => progressMilestones.includes(clue)).length;
+  const progress = Math.round((completedProgressMilestones / progressMilestones.length) * 100);
+  const formattedPoem = `
+    <blockquote class="poem">
+      <p>
+        <em>Called souls assemble, names are read,</em><br />
+        <em>as white snow crowns the roses red,</em><br />
+        <em>the key is turned by trembling hand,</em><br />
+        <em>her shadow falls on house and land.</em><br />
+        <em>Wake, dear heart, and claim your due:</em><br />
+        <em>receive the birthright kept for you.</em><br />
+        <em>Estates may pass by trust and deed; but!</em><br />
+        <em>nothing’s clear with just one read.</em>
+      </p>
+    </blockquote>
+  `;
   const paperClueRules = {
     elizabeth:
       `<p>“Miss Snow! How delightful to see you.<br />
@@ -689,6 +676,52 @@ const formattedPoem = `
     return paperClueWords.every(clue => paperClues.includes(clue));
   }
 
+  function getPaperCluePrelude(characterKey) {
+    const character = dialogue[characterKey];
+
+    if (!character?.paperClue || paperClues.includes(character.paperClue)) {
+      return '';
+    }
+
+    const clueText = !hasHeardPaperClueRule && paperClueRules[characterKey]
+      ? paperClueRules[characterKey]
+      : `<p>${character.name} gives you a slip of paper marked <strong>“${character.paperClue}”</strong>.</p>`;
+
+    if (!hasHeardPaperClueRule && paperClueRules[characterKey]) {
+      discover('heard-luncheon-poem', 'Heard Lady Gray’s luncheon poem', 'Heard luncheon poem');
+      setHasHeardPaperClueRule(true);
+    }
+
+    addPaperClue(character.paperClue);
+    discover(
+      `paper-clue-${character.paperClue.toLowerCase()}`,
+      `Received paper clue from ${character.name}`,
+      `Paper clue: ${character.paperClue}`
+    );
+
+    const paperCluesAfterNewClue = [...paperClues, character.paperClue];
+
+    const hasAllPaperCluesNow = paperClueWords.every(clue =>
+      paperCluesAfterNewClue.includes(clue)
+    );
+
+    if (hasAllPaperCluesNow) {
+      return `
+        ${clueText}
+
+        <p>The slips of paper shift in your reticule.</p>
+
+        <p>Taken in order, they say very little. Taken otherwise, they seem almost willing to confess.</p>
+
+        <p>What phrase do they form?</p>
+
+        <p>Try: <strong>arrange [phrase]</strong></p>
+      `;
+    }
+
+    return clueText;
+  }
+
   function toggleMusic() {
     if (!audioRef.current) return;
 
@@ -699,6 +732,17 @@ const formattedPoem = `
       audioRef.current.pause();
       setMusicPlaying(false);
     }
+  }
+
+  function getRoomImage(roomKey, objectsByRoom = roomObjects) {
+    if (
+      roomKey === 'upperLanding' &&
+      !(objectsByRoom.upperLanding || []).includes('candlesticks')
+    ) {
+      return `${import.meta.env.BASE_URL}images/upper-landing-no-candlesticks.png`;
+    }
+
+    return rooms[roomKey].image;
   }
 
   function removeCharacterFromRoom(characterKey) {
@@ -737,25 +781,38 @@ const formattedPoem = `
     }
 
     if (verb === 'help') {
-      const addedCommands = hasAllPaperClues()
-        ? `
-          arrange [phrase]  
-        `
-        : '';
+      const arrangeCommand = hasAllPaperClues()
+      ? `
+        - arrange [phrase]<br />
+      `
+      : '';
 
-      write(`<h4>Commands:</h4>
+        const endingCommand = finalMysteryStep === 'write-ending'
+    ? `
+      - write next chapter<br />
+    `
+    : '';
 
-        <p>- place name<br />
-        - go [place]<br />
-        - speak [person]<br />
-        - take [object]<br />
-        - examine [object]<br />
-        - remove [object]<br />
-        - inventory<br />
-        ${addedCommands}</p>
-        <p>Some objects must be taken; others left.<br />  
-        Do not be afraid to ask for help.<br />  
-        In Westmoor Hall, the answer very much depends on where you are standing.</p>`);
+  write(`<h4>Commands:</h4>
+
+    <p>
+    - place name<br />
+    - go [place]<br />
+    - look<br />
+    - speak [person]<br />
+    - examine [object]<br />
+    - take [object]<br />
+    - remove [object]<br />
+    - inventory or reticule<br />
+    - give [object] to [person]<br />
+    - use [object] on [object/place]<br />
+    - unlock [object/place]<br />
+    ${arrangeCommand}<br />
+    ${endingCommand}</p>
+
+    <p>Some objects must be taken; others left.<br />  
+    Do not be afraid to ask for help.<br />  
+    In Westmoor Hall, the answer very much depends on where you are standing.</p>`);
     } else if (verb === 'look') {
       write(getRoomText(location));
     } else if (verb === 'inventory') {
@@ -768,9 +825,11 @@ const formattedPoem = `
       removeItem(remainder);
     } else if (verb === 'give') {
       giveItem(remainder);
+    } else if (verb === 'unlock') {
+      unlockItem(remainder);
     } else if (verb === 'use') {
-      useItem(remainder); } 
-    else if (verb === 'examine') {
+      useItem(remainder);
+    } else if (verb === 'examine') {
       examineItem(remainder);
     } else if (verb === 'speak') {
       speakTo(remainder);
@@ -864,12 +923,12 @@ function getPeopleText(roomKey) {
   }
 
   if (roomKey === 'library' && hasPerson('turtle')) {
-    return `<p>Turtle Wexler has made herself at home among the shelves, which the shelves appear to resent.</p>`;
+    return `<p>Tabitha Wexler, alias "Turtle", sits at a chessboard, moving pieces for both players.<br />
+    Her gown is plausibly Regency; her signature braid is not.</p>`
   }
 
   if (roomKey === 'garden' && hasPerson('valjean')) {
-    return `Jeanne Valjean sits upon a stone seat; also out of time (though not by much.) Not the man you would expect to see; a woman. Beside her is a bag, as though at any time she may depart. Curious.`
-    // return `<p>Jeanne Valjean sits upon a stone seat with the guarded patience of someone prepared to depart at any moment.</p>`;
+    return `Jeanne Valjean sits upon a stone seat; also out of time (though not by much.)<br /> Not the man you would expect to see; a woman.<br /> Beside her is a bag, as though at any time she may depart.`
   }
 
   if (roomKey === 'attic' && hasPerson('spectre')) {
@@ -883,37 +942,78 @@ function getPeopleText(roomKey) {
   return '';
 }
 
+  // function goTo(placeInput) {
+  //   const requested = findRoomKey(placeInput);
+  //   if (!requested) {
+  //     write(`No place named “${placeInput || 'there'}” comes into focus.`);
+  //     return;
+  //   }
+
+  //   if (requested === 'study' && !isStudyUnlocked) {
+  //     write(`
+  //       <p>The Study door is locked.</p>`
+  //     );
+
+  //     setVisualImage(`${import.meta.env.BASE_URL}images/door.png`);
+  //     return;
+  //   }
+
+  //   const exitMatch = Object.values(room.exits).includes(requested);
+  //   if (!exitMatch) {
+  //     write(`You cannot reach the ${rooms[requested].title} from here.`);
+  //     return;
+  //   }
+
+  //   setLocation(requested);
+  //   setVisitedPlaces(previous => previous.includes(requested) ? previous : [...previous, requested]);
+  //   discover(
+  //     `visited-${requested}`,
+  //     `Visited: ${rooms[requested].title}`,
+  //     `Visited ${rooms[requested].title}`
+  //   );
+
+  //   // setVisualImage(rooms[requested].image);
+  //   setVisualImage(getRoomImage(requested));
+  //   write(getRoomText(requested));
+  // }
+
   function goTo(placeInput) {
     const requested = findRoomKey(placeInput);
+
     if (!requested) {
       write(`No place named “${placeInput || 'there'}” comes into focus.`);
       return;
     }
 
-    if (requested === 'study' && !isStudyUnlocked) {
-      write(`
-        <p>The Study door is locked.</p>`
-
-        // <p>The brass plate beneath the handle is worn bright, as if many hands have tried it before yours.</p>
-
-        // <p>Perhaps you could <strong>unlock study with brass key</strong>.</p>
-      );
-
-      setVisualImage(`${import.meta.env.BASE_URL}images/door.png`);
-      return;
-    }
-
     const exitMatch = Object.values(room.exits).includes(requested);
+
     if (!exitMatch) {
       write(`You cannot reach the ${rooms[requested].title} from here.`);
       return;
     }
 
+    if (requested === 'study' && !isStudyUnlocked) {
+      write(`
+        <p>The Study door is locked.</p>
+      `);
+
+      setVisualImage(`${import.meta.env.BASE_URL}images/door.png`);
+      return;
+    }
+
     setLocation(requested);
-    setVisitedPlaces(previous => previous.includes(requested) ? previous : [...previous, requested]);
-    // setVisualText(rooms[requested].image);
-    // console.log(rooms[requested].image)
-    setVisualImage(rooms[requested].image);
+
+    setVisitedPlaces(previous =>
+      previous.includes(requested) ? previous : [...previous, requested]
+    );
+
+    discover(
+      `visited-${requested}`,
+      `Visited: ${rooms[requested].title}`,
+      `Visited ${rooms[requested].title}`
+    );
+
+    setVisualImage(getRoomImage(requested));
     write(getRoomText(requested));
   }
 
@@ -924,35 +1024,50 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    if (found === 'trunk') {
-      if (!isTrunkUnlocked) {
-        write(`
-          <p>The trunk is locked.</p>
-
-          <p>The brass key does not look as if it belongs to this sort of lock.</p>
-
-          <p>Perhaps you could <strong>use</strong> something else.</p>
-        `);
-        return;
-      }
-
+  if (found === 'trunk') {
+    if (!isTrunkOpen()) {
       write(`
         <p>You try to lift the trunk.</p>
 
-        <p>It does not so much as dignify the attempt by shifting.</p>
+        <p>It does not so much as dignify your attempt by shifting.</p>
 
-        <p>The trunk is unlocked now, but it is far too heavy to carry.</p>
+        <p>It is heavy, and locked besides - not very useful.</p>
       `);
       return;
     }
 
+    write(`
+      <p>You try to lift the trunk.</p>
+
+      <p>It does not so much as dignify your attempt by shifting.</p>
+
+      <p>The trunk is unlocked now, but it is far too heavy to carry.</p>
+    `);
+    return;
+  }
+
     addItem(found);
-    setRoomObjects(previous => ({
+    discover(
+      `took-${found.replaceAll(' ', '-')}`,
+      `Took: ${found}`,
+      `Took ${found}`
+    );
+    discover(objectDetails[found]?.clue, `Took: ${found}`, objectDetails[found]?.clueLabel);
+
+    setRoomObjects(previous => {
+    const nextRoomObjects = {
       ...previous,
       [location]: previous[location].filter(object => object !== found)
-    }));
+    };
 
-    write(`Taken: ${found}.`);
+    if (location === 'upperLanding' && found === 'candlesticks') {
+      setVisualImage(getRoomImage(location, nextRoomObjects));
+    }
+
+    return nextRoomObjects;
+  });
+
+  write(`Taken: ${found}.`);
   }
 
   function wrongGiftResponse(characterKey, item) {
@@ -1021,17 +1136,41 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    if (characterKey === 'gwendolen' && item === 'cigarette case') {
+    if (characterKey === 'elizabeth' && item === 'correspondence') {
+      const paperCluePrelude = getPaperCluePrelude(characterKey);
+
       completeGift(item, characterKey);
-      // setVisualText(dialogue.natasha.image);
 
       discover(
-        'gwendolyn-cecily-realization',
+        'elizabeth-jane-realization',
+        'Gave Jane’s correspondence to Elizabeth',
+        'Elizabeth remembers Jane'
+      );
+
+      write(`
+        ${paperCluePrelude}
+      <p>Elizabeth takes the letter from you with a smirk of amusement, which fades to sentimental sincerity as she reads.</p>
+      <p>“I am most fortunate,” she says, “that Jane and I are such a joy and comfort to one another, in good times and in bad.”</p>
+      <p>“I have been told my family is foolish; and I have said so often enough myself.<br /> My circumstances are such that it has never been guaranteed that I should have husband, or a fortune, or any <i>respectable</i> conclusion to my story.<br /> But if I had nothing in the world, I should still have Jane. And that would be no small portion.”</p>
+      <p>“To think our mother risked Jane's health for the sake of a man’s notice. Jane is worth more than every match in Hertfordshire.”</p>` );
+
+      return;
+    }
+
+    if (characterKey === 'gwendolen' && item === 'cigarette case') {
+      const paperCluePrelude = getPaperCluePrelude(characterKey);
+
+      completeGift(item, characterKey);
+      discover(
+        'gwendolen-cecily-realization',
         'Gave Cecily cigarette case to Gwendolen',
         'Gwendolen remembers Cecily'
       );
 
-      write(`<p>You give the cigarette case to Gwedolen.</p>
+      write(`
+        ${paperCluePrelude}
+
+        <p>You give the cigarette case to Gwedolen.</p>
 
         <p>“Something something Cecily is my sister</p>”`);
 
@@ -1039,8 +1178,9 @@ function getPeopleText(roomKey) {
     }
 
     if (characterKey === 'natasha' && item === 'love letter') {
+      const paperCluePrelude = getPaperCluePrelude(characterKey);
+
       completeGift(item, characterKey);
-      // setVisualText(dialogue.natasha.image);
 
       discover(
         'natasha-sonya-realization',
@@ -1048,7 +1188,10 @@ function getPeopleText(roomKey) {
         'Natasha remembers Sonya'
       );
 
-      write(`<p>You give the love letter to Natasha.<br />
+      write(`
+        ${paperCluePrelude}
+
+        <p>You give the love letter to Natasha.<br />
 
       She reads the letter once quickly, then again, with care.</p>  
       <p>“This is not from Anatole,” she says.<br />
@@ -1063,6 +1206,8 @@ function getPeopleText(roomKey) {
     }
 
     if (characterKey === 'turtle' && item === 'ring') {
+      const paperCluePrelude = getPaperCluePrelude(characterKey);
+
       completeGift(item, characterKey);
 
       discover(
@@ -1072,6 +1217,8 @@ function getPeopleText(roomKey) {
       );
 
       write(`
+        ${paperCluePrelude}
+
         <p>You give the engagement ring to Turtle.</p>
 
         <p>You expect her to snatch it, in her excited way, but takes it slowly and turns it over in her palm.</p>
@@ -1095,6 +1242,8 @@ function getPeopleText(roomKey) {
     }
 
     if (characterKey === 'valjean' && item === 'candlesticks') {
+      const paperCluePrelude = getPaperCluePrelude(characterKey);
+
       completeGift(item, characterKey);
 
       discover(
@@ -1103,18 +1252,21 @@ function getPeopleText(roomKey) {
         'Valjean remembers sister'
       );
 
-      write(`<p>Valjeanne takes the candlesticks carefully, as if they weigh even more than silver.</p>
+      write(`
+        ${paperCluePrelude}
 
-      <p>“Everyone remembers Cosette, the child I saved.\n  
-      But no one remembers the child I *tried* to save. My sister's child.\n  
+      <p>Valjeanne takes the candlesticks carefully, as if they weigh even more than silver.</p>
+
+      <p>“Everyone remembers Cosette, the child I saved.<br />  
+      But no one remembers the child I <i>tried</i> to save. My sister's child.<br /> 
       And before all that, there was my sister.</p>
 
-      <p>I stole bread for her and her children. She is the beginning of my story.\n  
-      Not my love for Cosette. Not the love of the Bishop. My love for her.\n
-      Hugo thinks that in his agony a man would forget his family. I do not believe that.\n  
-      And I know a sister never would.\n
-      I was given these candlesticks to light my way once, then I will use them now.\n  
-      I will find my sister’s family. I will raise us all to the light.”</p>`);
+      <p>I stole bread for her and her children.<br />  
+      My story began not with my love for Cosette, not the love of the Bishop, but with my love for her.</p>
+      <p>My biographer Victor Hugo thinks that, in his agony, a man would forget his family.<br /> 
+      I do not believe that. And I know a sister never would.</p>
+      <p>I was given these candlesticks to light my way once, and I will use them again now.<br /> 
+      <p>I will find my sister and her family. I will raise us all to the light.”</p>`);
 
       return;
     }
@@ -1129,6 +1281,11 @@ function getPeopleText(roomKey) {
       return;
     }
 
+    discover(
+      `removed-${found.replaceAll(' ', '-')}`,
+      `Removed from reticule: ${found}`,
+      `Removed ${found}`
+    );
     setInventory(previous => previous.filter(item => item !== found));
     setRoomObjects(previous => ({ ...previous, [location]: [...previous[location], found] }));
     write(`Removed from reticule: ${found}. It is now in ${room.title}.`);
@@ -1141,13 +1298,48 @@ function getPeopleText(roomKey) {
       return;
     }
 
-    const detail = objectDetails[found];
-    // setVisualText(detail.image);
-    // ToDo deprecate required posession?
-    if (detail.requiresPossession && !inventory.includes(found)) {
-      // write(`${detail.text} You will need to take it before this clue can be used.`);
+    if (found === 'trunk') {
+      discover('examined-trunk', 'Examined: trunk', 'Examined trunk');
+
+      if (isTrunkOpen()) {
+        const manuscriptLocation = getManuscriptLocationStatus();
+
+        if (manuscriptLocation === 'inventory') {
+          write(`
+            <p>The trunk stands open.</p>
+
+            <p>It is old, heavy, and empty now. The manuscript is already in your reticule.</p>
+          `);
+          return;
+        }
+
+        if (manuscriptLocation === 'attic') {
+          write(`<p>The trunk stands open.</p>
+            <p>It is old and heavy, but no longer locked.</p>
+            <p>Inside lies a manuscript labeled <em>Carry On, Simon</em>.</p>
+          `);
+          return;
+        }
+
+        write(`
+          <p>The trunk stands open.</p>
+
+          <p>It is old, heavy, and empty.</p>
+        `);
+        return;
+      }
+
+      write(`<p>The old trunk is festooned with cobwebs. It is heavy, and, in spite of its age, securely locked.</p>`);
       return;
     }
+
+    const detail = objectDetails[found];
+
+    if (!detail) {
+      write(`You find no useful detail for “${found}.”`);
+      return;
+    }
+
     discover(detail.clue, `Examined: ${found}`, detail.clueLabel);
     write(detail.text);
   }
@@ -1167,7 +1359,7 @@ function getPeopleText(roomKey) {
       (normalized.includes('door') && location === 'greatHall');
 
     const isTryingTrunk =
-      normalized.includes('trunk') || location === 'attic';
+      normalized.includes('trunk');
 
     if (isTryingStudy) {
       if (location !== 'greatHall') {
@@ -1206,6 +1398,12 @@ function getPeopleText(roomKey) {
 
       setIsStudyUnlocked(true);
 
+      setInventory(previous =>
+        previous.filter(item => item !== 'key')
+      );
+
+      discover('study-unlocked', 'Unlocked Lady Gray’s Study', 'Unlocked Study');
+
       write(`
         <p>You fit the brass key into the Study door.</p>
 
@@ -1219,7 +1417,7 @@ function getPeopleText(roomKey) {
     }
 
     if (!isTryingTrunk) {
-      write(`<p>Use what, and on what?</p>`);
+      write(`<p>You try using it, but nothing <i>useful</i> happens.</p>`);
       return;
     }
 
@@ -1271,12 +1469,19 @@ function getPeopleText(roomKey) {
     }
 
     if (isUsingKey) {
+      if (!inventory.includes('key')) {
+        write(`
+          <p>You do not have a key.</p>
+        `);
+        return;
+      }
+
+      discover('tried-key-on-trunk', 'Tried the key on the trunk', 'Tried key on trunk');
+
       write(`
         <p>You try the brass key in the trunk lock.</p>
 
-        <p>It will not turn. This key belongs to a more formal door.</p>
-
-        <p>The little trunk lock wants something thinner.</p>
+        <p>It will not turn. This key belongs to a larger lock.</p>
 
         <p>Perhaps you could <strong>use</strong> something else.</p>
       `);
@@ -1290,6 +1495,7 @@ function getPeopleText(roomKey) {
       }
 
       setIsTrunkUnlocked(true);
+      discover('trunk-unlocked', 'Unlocked attic trunk with hairpins', 'Unlocked trunk');
 
       setRoomObjects(previous => {
         const manuscriptAlreadySomewhere =
@@ -1319,12 +1525,80 @@ function getPeopleText(roomKey) {
       return;
     }
 
+    write(`<p>You try using it, but nothing <i>useful</i> happens.</p>`);
+
+    // write(`
+    //   <p>The trunk is locked.</p>
+
+    //   <p>The brass key seems too large for it.</p>
+
+    //   <p>Perhaps you could <strong>use</strong> something </strong>on trunk</strong>.</p>
+    // `);
+  }
+
+  function unlockItem(remainder) {
+    const normalized = normalize(remainder);
+
+    const isTryingStudy =
+      normalized.includes('study') ||
+      normalized.includes('study door') ||
+      (normalized.includes('door') && location === 'greatHall');
+
+    const isTryingTrunk = normalized.includes('trunk');
+
+    if (isTryingStudy) {
+      if (location !== 'greatHall') {
+        write(`
+          <p>You are not standing by the Study door.</p>
+        `);
+        return;
+      }
+
+      if (isStudyUnlocked) {
+        write(`
+          <p>The Study door is already unlocked.</p>
+
+          <p>You may enter the Study now.</p>
+        `);
+        return;
+      }
+
+      if (!inventory.includes('key')) {
+        write(`
+          <p>You try the Study door, but it remains locked.</p>
+
+          <p>You do not have the key.</p>
+        `);
+        return;
+      }
+
+      setIsStudyUnlocked(true);
+
+      setInventory(previous =>
+        previous.filter(item => item !== 'key')
+      );
+
+      discover('study-unlocked', 'Unlocked Lady Gray’s Study', 'Unlocked Study');
+
+      write(`
+        <p>You fit the brass key into the Study door.</p>
+
+        <p>The lock turns with a soft, final click.</p>
+
+        <p>The Study is unlocked.</p>
+
+        <p>Try: <strong>go study</strong></p>
+      `);
+      return;
+    }
+
+    if (isTryingTrunk) {
+      useItem('hairpins on trunk');
+      return;
+    }
+
     write(`
-      <p>The trunk is locked.</p>
-
-      <p>The brass key seems too large for it.</p>
-
-      <p>Perhaps you could <strong>use</strong> something </strong>on trunk</strong>.</p>
+      <p>You are not sure what you mean to unlock.</p>
     `);
   }
 
@@ -1363,45 +1637,48 @@ function getPeopleText(roomKey) {
       `Conversation: ${character.displayName || character.name}`,
       character.clueLabel
     );
+    discover(
+      `spoke-to-${key}`,
+      `Conversation: ${character.displayName || character.name}`,
+      `Spoke to ${character.displayName || character.name}`
+    );
+
+    // if (key === 'gray' && location === 'study') {
+    //   setFinalMysteryStep('missing-story');
+
+    //   write(character.intro);
+
+    //   return;
+    // }
 
     if (key === 'gray' && location === 'study') {
+      if (!isReadyForLadyGray()) {
+        write(getLadyGrayGuidance());
+        return;
+      }
+
       setFinalMysteryStep('missing-story');
-
       write(character.intro);
-
       return;
     }
 
     let response = foundClues.length >= 3 ? character.later : character.intro;
 
-    if (key !== 'reynolds' && !hasHeardPaperClueRule) {
-      response = paperClueRules[key] || response;
-      setHasHeardPaperClueRule(true);
+    const paperCluePrelude = getPaperCluePrelude(key);
+
+    if (paperCluePrelude) {
+      response = paperCluePrelude;
     }
 
- if (character.paperClue && !paperClues.includes(character.paperClue)) {
-  addPaperClue(character.paperClue);
-
-  const paperCluesAfterNewClue = [...paperClues, character.paperClue];
-
-  const hasAllPaperCluesNow = paperClueWords.every(clue =>
-    paperCluesAfterNewClue.includes(clue)
-  );
-
-  if (hasAllPaperCluesNow) {
-    response += `
-      <p>The slips of paper shift in your reticule.</p>
-
-      <p>Taken in order, they say very little. Taken otherwise, they seem almost willing to confess.</p>
-
-      <p>What phrase do they form?</p>
-
-      <p>Try: <strong>arrange [phrase]</strong></p>
-    `;
-  }
-}
-
     write(response);
+  }
+
+  function isTrunkOpen() {
+    return (
+      isTrunkUnlocked ||
+      inventory.includes('manuscript') ||
+      Object.values(roomObjects).some(objects => objects.includes('manuscript'))
+    );
   }
 
   function getManuscriptLocationStatus() {
@@ -1416,47 +1693,47 @@ function getPeopleText(roomKey) {
     return roomWithManuscript || null;
   }
 
-function answerPaperClues(guess) {
-  const hasAllPaperClues = paperClueWords.every(clue =>
-    paperClues.includes(clue)
-  );
+  function answerPaperClues(guess) {
+    const hasAllPaperClues = paperClueWords.every(clue =>
+      paperClues.includes(clue)
+    );
 
-  if (!hasAllPaperClues) {
-    write('<p>The paper clues are not all gathered yet.</p>');
-    return;
+    if (!hasAllPaperClues) {
+      write('<p>The paper clues are not all gathered yet.</p>');
+      return;
+    }
+
+    const guessText = `<p>You arrange the clues as: “${guess}.”</p>`;
+
+    const witnessKey = peopleHere.find(personKey => personKey !== 'reynolds');
+    const witness = witnessKey
+      ? dialogue[witnessKey].displayName || dialogue[witnessKey].name
+      : 'your companion';
+
+    const characterText = `
+      <p>“Oh!” exclaims ${witness}. “But what does it mean? Surely not our gracious hostess?”</p>
+
+      <p>“Oddly enough,” you reply, “I can think of several meanings...”</p>
+    `;
+
+    if (normalizePaperClueGuess(guess) === paperClueAnswer) {
+      discover('paper-clue-answer', 'Solved paper clues', 'Paper clue phrase');
+
+      write(`
+        ${guessText}
+
+        <p>The paper slips settle into order: <strong>“BEWARE THE GRAY LADY.”</strong></p>
+
+        ${characterText}
+      `);
+    } else {
+      write(`
+        ${guessText}
+
+        <p>No, that doesn't make sense.</p>
+      `);
+    }
   }
-
-  const guessText = `<p>You arrange the clues as: “${guess}.”</p>`;
-
-  const witnessKey = peopleHere.find(personKey => personKey !== 'reynolds');
-  const witness = witnessKey
-    ? dialogue[witnessKey].displayName || dialogue[witnessKey].name
-    : 'your companion';
-
-  const characterText = `
-    <p>“Oh!” exclaims ${witness}. “But what does it mean? Surely not our gracious hostess?”</p>
-
-    <p>“Oddly enough,” you reply, “I can think of several meanings...”</p>
-  `;
-
-  if (normalizePaperClueGuess(guess) === paperClueAnswer) {
-    discover('paper-clue-answer', 'Solved paper clues', 'Paper clue phrase');
-
-    write(`
-      ${guessText}
-
-      <p>The paper slips settle into order: <strong>“BEWARE THE GRAY LADY.”</strong></p>
-
-      ${characterText}
-    `);
-  } else {
-    write(`
-      ${guessText}
-
-      <p>No, that doesn't make sense.</p>
-    `);
-  }
-}
 
   // function openStudy() {
   //   if (location !== 'greatHall') {
@@ -1474,6 +1751,109 @@ function answerPaperClues(guess) {
   //   write(rooms.lockedStudy.text);
   // }
 
+  function hasFound(clue) {
+    return foundClues.includes(clue);
+  }
+
+  function getLadyGrayRemainingTasks() {
+    const tasks = [];
+
+    if (!hasFound('paper-clue-answer')) {
+      tasks.push({
+        label: 'The paper clues are not yet in their proper order.',
+        hint: hasAllPaperClues()
+          ? 'Arrange them into a warning.'
+          : 'Speak with the remaining guests and gather every slip of paper.'
+      });
+    }
+
+    if (!hasFound('elizabeth-jane-realization')) {
+      tasks.push({
+        label: 'Elizabeth has not yet remembered what Jane is to her.',
+        hint: 'Something in the servants’ passage belongs in the drawing room.'
+      });
+    }
+
+    if (!hasFound('gwendolen-cecily-realization')) {
+      tasks.push({
+        label: 'Gwendolen has not yet understood Cecily.',
+        hint: 'A certain cigarette case should be returned to its proper reader.'
+      });
+    }
+
+    if (!hasFound('natasha-sonya-realization')) {
+      tasks.push({
+        label: 'Natasha has not yet understood Sonya’s love.',
+        hint: 'A love letter may be meant for the music room.'
+      });
+    }
+
+    if (!hasFound('turtle-angela-ring-realization')) {
+      tasks.push({
+        label: 'Turtle has not yet understood Angela’s ring.',
+        hint: 'The garden holds something that belongs in the library.'
+      });
+    }
+
+    if (!hasFound('valjean-sister-realization')) {
+      tasks.push({
+        label: 'Jeanne Valjean has not yet remembered the sister at the beginning of her story.',
+        hint: 'The silver candlesticks should be returned to her.'
+      });
+    }
+
+    if (!hasFound('wren-consulted')) {
+      tasks.push({
+        label: 'The spectre has not yet spoken plainly enough.',
+        hint: 'There is someone in the attic who looks too much like you.'
+      });
+    }
+
+    if (!hasFound('fanfiction-thread')) {
+      tasks.push({
+        label: 'The manuscript has not yet been found.',
+        hint: 'The attic trunk is locked, but not every lock wants a key.'
+      });
+    }
+
+    return tasks;
+  }
+
+  function isReadyForLadyGray() {
+    return getLadyGrayRemainingTasks().length === 0;
+  }
+
+  function getLadyGrayGuidance() {
+    const remainingTasks = getLadyGrayRemainingTasks();
+
+    if (remainingTasks.length === 0) {
+      return dialogue.gray.intro;
+    }
+
+    const taskList = remainingTasks
+      .map(task => `
+        <p><li>
+          ${task.label}<br />
+          <em>${task.hint}</em>
+        </li></p>
+      `)
+      .join('');
+
+      return `
+      <p>Lady Gray listens without interrupting. When you have finished, she taps one gloved finger against the desk.</p>
+
+      <p>“Not yet,” she says. “The house has yielded much, but not enough. A story cannot be concluded while its sisters are still misplaced.”</p>
+
+      <p>“Consider what remains.”</p>
+
+      <ul>
+        ${taskList}
+      </ul>
+
+      <p>“Return when the pattern is complete.”</p>
+    `;
+  }
+
   function answerIncludesMissingSister(answer) {
     const normalized = normalize(answer);
 
@@ -1486,86 +1866,88 @@ function answerPaperClues(guess) {
   }
 
   function answerFinalMystery(answer) {
-  if (!answerIncludesMissingSister(answer)) {
+    if (!answerIncludesMissingSister(answer)) {
+      write(`
+        <p>Lady Gray watches you with grave patience.</p>
+
+        <p>“You have heard my clues. What is your birthright? Not a fortune. Not a husband.”</p>
+
+        <p>“A bird in hand,” she says again. “Who has been beside you all along?”</p>
+      `);
+
+      return;
+    }
+
+    discover('final-mystery-answered', 'Answered Lady Gray’s final question', 'Answered final mystery');
+    setFinalMysteryStep('write-ending');
+
     write(`
-      <p>Lady Gray watches you with grave patience.</p>
+      <p>“Yes,” Lady Gray says. “Your sister, Wren.”</p>
 
-      <p>“You have heard my clues. What is your birthright? Not a fortune. Not a husband.”</p>
-
-      <p>“A bird in hand,” she says again. “Who has been beside you all along?”</p>
+      <p>“There was a car accident,” Lady Gray says. “Another late-season Nebraska snow storm.”</p>
+      <p>“It's you who are missing. In the waking world, you are in the melodramatic scenario that would give a writer pause.”</p>
+      <p>The red roses through the frosted window blur into brake lights.</p>
+      <p>“Wren has been by your side, been telling you stories you already knew, only altered. She promoted the sisters in stories that have nearly forgotten them. Sonya beside Natasha. Jane beside Elizabeth. Angela beside Turtle. Jean as Jeanne, with the beloved sister Victor Hugo never even bothered to name!”</p>
+      <p>“Wren has been calling you back with her stories.”</p>
+      <p>Lady Gray indicates the chair with a sweep of her hand.</p>
+      <p>The desk waits. The paper is blank. The pen is in your hand.</p>
+      <p>“Sit,” Lady Gray says, “and write the next chapter of your life.”</p>
+      <p>Try: <strong>write next chapter</strong></p>
     `);
-
-    return;
   }
 
-  setFinalMysteryStep('write-ending');
+  function finishStory(input) {
+    const normalized = normalize(input);
 
-  write(`
-    <p>“Yes,” Lady Gray says. “Your sister, Wren.”</p>
+    const isWriting =
+      normalized.includes('write') ||
+      normalized.includes('chapter') ||
+      normalized.includes('desk') ||
+      normalized.includes('sit');
 
-    <p>“There was a car accident,” Lady Gray says. “Another late-season Nebraska snow storm.”</p>
-    <p>“It's you who are missing. In the waking world, you are in the melodramatic scenario that would give a writer pause.”</p>
-    <p>The red roses through the frosted window blur into brake lights.</p>
-    <p>“Wren has been by your side, been telling you stories you already knew, only altered. She promoted the sisters in stories that have nearly forgotten them. Sonya beside Natasha. Jane beside Elizabeth. Angela beside Turtle. Jean as Jeanne, with the beloved sister Victor Hugo never even bothered to name!”</p>
-    <p>“Wren has been calling you back with her stories.”</p>
-    <p>Lady Gray indicates the chair with a sweep of her hand.</p>
-    <p>The desk waits. The paper is blank. The pen is in your hand.</p>
-    <p>“Sit,” Lady Gray says, “and write the next chapter of your life.”</p>
-    <p>Try: <strong>write chapter</strong></p>
-  `);
-}
+    if (!isWriting) {
+      write(`
+        <p>The desk waits.</p>
 
-function finishStory(input) {
-  const normalized = normalize(input);
+        <p>Lady Gray says, “Not by solving now. By choosing. Sit at the desk. Write.”</p>
 
-  const isWriting =
-    normalized.includes('write') ||
-    normalized.includes('chapter') ||
-    normalized.includes('desk') ||
-    normalized.includes('sit');
+        <p>Try: <strong>write chapter</strong></p>
+      `);
 
-  if (!isWriting) {
+      return;
+    }
+
+    discover('chapter-written', 'Wrote the next chapter', 'Wrote chapter');
+    setFinalMysteryStep('complete');
+    setVisualImage(`${import.meta.env.BASE_URL}images/hospital.png`)
     write(`
-      <p>The desk waits.</p>
+      <p>You sit at the desk.</p>
 
-      <p>Lady Gray says, “Not by solving now. By choosing. Sit at the desk. Write.”</p>
+      <p>For a moment, you do not know how to begin. Then your hand moves.</p>
 
-      <p>Try: <strong>write chapter</strong></p>
+      <blockquote>
+        <p><em>The next chapter begins with waking.</em></p>
+      </blockquote>
+
+      <p>The ink darkens. The room loosens around you. Westmoor Hall folds itself away: the fogged windows, the red roses, the silver candlesticks, the impossible snow.</p>
+
+      <p>You wake to white ceiling tiles, the soft mechanical rhythm of a hospital room, and your sister asleep in the chair beside your bed.</p>
+
+      <p>Wren’s hand is wrapped around yours.</p>
+
+      <p>There are flowers on the table. Not roses. Something brighter and less dramatic, with a card tucked among the stems.</p>
+
+      <p><em>From Professor Piper, who expects the next chapter when you are ready.</em></p>
+
+      <p>Wren opens her eyes.</p>
+
+      <p>For once, neither of you says the clever thing first.</p>
+
+      <p>You squeeze her hand.</p>
+
+      <p>And the story goes on.</p>
     `);
-
-    return;
   }
-
-  setFinalMysteryStep('complete');
-  setVisualImage(`${import.meta.env.BASE_URL}images/hospital.png`)
-  write(`
-    <p>You sit at the desk.</p>
-
-    <p>For a moment, you do not know how to begin. Then your hand moves.</p>
-
-    <blockquote>
-      <p><em>The next chapter begins with waking.</em></p>
-    </blockquote>
-
-    <p>The ink darkens. The room loosens around you. Westmoor Hall folds itself away: the fogged windows, the red roses, the silver candlesticks, the impossible snow.</p>
-
-    <p>You wake to white ceiling tiles, the soft mechanical rhythm of a hospital room, and your sister asleep in the chair beside your bed.</p>
-
-    <p>Wren’s hand is wrapped around yours.</p>
-
-    <p>There are flowers on the table. Not roses. Something brighter and less dramatic, with a card tucked among the stems.</p>
-
-    <p><em>From Professor Piper, who expects the next chapter when you are ready.</em></p>
-
-    <p>Wren opens her eyes.</p>
-
-    <p>For once, neither of you says the clever thing first.</p>
-
-    <p>You squeeze her hand.</p>
-
-    <p>And the story goes on.</p>
-  `);
-}
 
   function writeEnding() {
     if (location !== 'lockedStudy') {
@@ -1573,10 +1955,10 @@ function finishStory(input) {
       return;
     }
 
-    const missingClues = requiredClues.filter(clue => !foundClues.includes(clue));
+    const missingMilestones = progressMilestones.filter(clue => !foundClues.includes(clue));
     const missingItems = requiredInventoryForEnding.filter(item => !inventory.includes(item));
-    if (missingClues.length || missingItems.length) {
-      write(`The ending resists you. Missing clues: ${missingClues.length}. Required objects not carried: ${missingItems.length ? missingItems.join(', ') : 'none'}.`);
+    if (missingMilestones.length || missingItems.length) {
+      write(`The ending resists you. Missing progress: ${missingMilestones.length}. Required objects not carried: ${missingItems.length ? missingItems.join(', ') : 'none'}.`);
       return;
     }
 
@@ -1632,62 +2014,73 @@ function finishStory(input) {
   );
 }
 
-  if (page === 'about') {
+//   if (page === 'about') {
+//   return (
+//     <>
+//       <StaticPage title="About" goToPage={goToPage}>
+//         <div className="static-content about-text">
+//           <p>
+//             <strong>FOR JENNY</strong><br />
+//             who did not ask for a puzzle-mystery<br />
+//             but got one anyway
+//           </p>
+
+//           <h2>The Prompt</h2>
+
+//           <ul>
+//             <li>
+//               A podcast, podcast transcript, or live performance where characters from one
+//               story discuss another story, as part of their ongoing story or musical analysis
+//               podcast.
+//             </li>
+
+//             <li>
+//               A <em>Les Misérables</em> character isekai&apos;d into another world and their
+//               confusion at 1) the existence of men and 2) the idea that women are supposed
+//               to fall in love with men instead of with other women.
+//             </li>
+
+//             <li>
+//               <em>Fangirl</em>, and any character from another work writing fic, about their
+//               world, about another world, who knows!
+//             </li>
+
+//             <li>
+//               A note from several years ago titled “solstice swap” that says only:
+//               “Gray is Sam Westing.”
+//             </li>
+//           </ul>
+
+//           <p>
+//             I chose <em>Pride and Prejudice</em>, <em>Great Comet</em>, and{' '}
+//             <em>Earnest</em> as worlds or works that might be fun for these crossover
+//             prompts, but do not consider yourself limited.
+//           </p>
+//         </div>
+
+//         <h2>Credits</h2>
+
+//         <p>
+//           The Westmoor Theme is <a href="https://open.spotify.com/track/4XGgzwM2mBPmru2EBJbvd3?flow_ctx=d3590103-c6a1-4cd5-9121-d5a92615062f%3A1780426499a">a Kanye West Medley by Nicholas Yee.</a> 
+//         </p>
+//         <p>
+//           A credit to Alison Bechdel for <a href="https://en.wikipedia.org/wiki/Bechdel_test">The Bechdel Test</a>, which I wanted this project to ace.
+//         </p>
+//       </StaticPage>
+
+//       <Footer goToPage={goToPage} currentPage={page}/>
+//     </>
+//   );
+// }
+
+if (page === 'about') {
   return (
-    <>
-      <StaticPage title="About" goToPage={goToPage}>
-        <div className="static-content about-text">
-          <p>
-            <strong>FOR JENNY</strong><br />
-            who did not ask for a puzzle-mystery<br />
-            but got one anyway
-          </p>
-
-          <h2>The Prompt</h2>
-
-          <ul>
-            <li>
-              A podcast, podcast transcript, or live performance where characters from one
-              story discuss another story, as part of their ongoing story or musical analysis
-              podcast.
-            </li>
-
-            <li>
-              A <em>Les Misérables</em> character isekai&apos;d into another world and their
-              confusion at 1) the existence of men and 2) the idea that women are supposed
-              to fall in love with men instead of with other women.
-            </li>
-
-            <li>
-              <em>Fangirl</em>, and any character from another work writing fic, about their
-              world, about another world, who knows!
-            </li>
-
-            <li>
-              A note from several years ago titled “solstice swap” that says only:
-              “Gray is Sam Westing.”
-            </li>
-          </ul>
-
-          <p>
-            I chose <em>Pride and Prejudice</em>, <em>Great Comet</em>, and{' '}
-            <em>Earnest</em> as worlds or works that might be fun for these crossover
-            prompts, but do not consider yourself limited.
-          </p>
-        </div>
-
-        <h2>Credits</h2>
-
-        <p>
-          The Westmoor Theme is <a href="https://open.spotify.com/track/4XGgzwM2mBPmru2EBJbvd3?flow_ctx=d3590103-c6a1-4cd5-9121-d5a92615062f%3A1780426499a">a Kanye West Medley by Nicholas Yee.</a> 
-        </p>
-        <p>
-          A credit to Alison Bechdel for <a href="https://en.wikipedia.org/wiki/Bechdel_test">The Bechdel Test</a>, which I wanted this project to ace.
-        </p>
-      </StaticPage>
-
-      <Footer goToPage={goToPage} currentPage={page}/>
-    </>
+    <AboutPage
+      StaticPage={StaticPage}
+      Footer={Footer}
+      goToPage={goToPage}
+      currentPage={page}
+    />
   );
 }
 
@@ -1852,66 +2245,110 @@ return (
 
 
     <section className="game">
-      <header className="game-top">
-        <div className="game-top-left">
-          <h1>The Westmoor Game</h1>
+      <header className="game-header">
+  <div className="game-header-left">
+    <h1>The Westmoor Game</h1>
 
-          <section className="summary-grid" aria-label="Current room summary">
-            <section className="summary-card">
-              <h2>People</h2>
-              <p>{roomSummary.people.length ? roomSummary.people.join(' · ') : 'None'}</p>
-            </section>
+    <section className="room-grid" aria-label="Current room summary">
+      <section>
+        <h3>People</h3>
+        <p>{roomSummary.people.length ? roomSummary.people.join(' · ') : 'None'}</p>
+      </section>
 
-            <section className="summary-card">
-              <h2>Objects</h2>
-              <p>{roomSummary.objects.length ? roomSummary.objects.join(' · ') : 'None'}</p>
-            </section>
+      <section>
+        <h3>Objects</h3>
+        <p>{roomSummary.objects.length ? roomSummary.objects.join(' · ') : 'None'}</p>
+      </section>
 
-            <section className="summary-card">
-              <h2>Places</h2>
-              <p>{roomSummary.exits.length ? roomSummary.exits.join(' · ') : 'None'}</p>
-            </section>
-          </section>
-        </div>
+      {/* <section>
+        <h3>Places</h3> */}
+        {/* <p>{roomSummary.exits.length ? roomSummary.exits.join(' · ') : 'None'}</p> */}
+      {/* </section> */}
+{/* <section>
+  <h3>Places</h3>
 
-        <img
-          src={`${import.meta.env.BASE_URL}images/westmoor-hall.png`}
-          alt="Westmoor Hall"
-          className="game-hall-corner-image"
-        />
-      </header>
-      {/* <div className="game-header">
-        <h1>The Westmoor Game</h1>
+  <p className="place-list">
+    {roomSummary.exits.length ? (
+      roomSummary.exits.map((place, index) => (
+        <span className="place-item" key={place}>
+          {place.replaceAll(' ', '\u00A0')}
+          {index < roomSummary.exits.length - 1 && '\u00A0·'}
+        </span>
+      ))
+    ) : (
+      'None'
+    )}
+  </p>
+</section> */}
 
-        <img
-          src={`${import.meta.env.BASE_URL}images/westmoor-hall.png`}
-          alt="Westmoor Hall"
-          className="game-hall-corner-image"
-        />
-      </div> */}
-      {/* <h2>{room.title}</h2> */}
-      {/* <HtmlText html={getRoomText(location)} className="room-text" /> */}
+<section>
+  <h3>Places</h3>
 
-      <div className="room-grid" aria-label="Current room contents">
-        <InfoBlock title="People" values={roomSummary.people} />
-        <InfoBlock title="Objects" values={roomSummary.objects} />
-        <InfoBlock title="Places" values={roomSummary.exits} />
-      </div>
+  <p className="places-wrap">
+    {roomSummary.exits.length ? (
+      roomSummary.exits.map((place, index) => (
+        <React.Fragment key={place}>
+          <span className="places-token">
+            {place.replaceAll(' ', '\u00A0')}
+          </span>
 
-      <div className="meter" aria-label={`Mystery progress ${progress}%`}><span style={{ width: `${progress}%` }}></span></div>
-      <p className="progress">Clues: {foundClues.filter(clue => requiredClues.includes(clue)).length}/{requiredClues.length}</p>
+          {index < roomSummary.exits.length - 1 && (
+            <>
+              <span className="places-dot"> · </span>
+              <wbr />
+            </>
+          )}
+        </React.Fragment>
+      ))
+    ) : (
+      'None'
+    )}
+  </p>
+</section>
+    </section>
+  </div>
+
+  <img
+    src={`${import.meta.env.BASE_URL}images/westmoor-hall.png`}
+    alt="Westmoor Hall"
+    className="game-hall-corner-image"
+  />
+</header>
+      <div className="meter" aria-label={`Story progress ${progress}%`}><span style={{ width: `${progress}%` }}></span></div>
+      <p className="progress">Story Progress: {completedProgressMilestones}/{progressMilestones.length}</p>
 
       <div className="message" aria-live="polite">
-        {/* <ReactMarkdown>{message}</ReactMarkdown> */}
         <HtmlText html={message} />
       </div>
 
+      <form
+        className="command-form"
+        onSubmit={event => {
+          event.preventDefault();
+          handleCommand(command);
+        }}
+      >
+        <label htmlFor="command">Command</label>
 
-      <form onSubmit={event => { event.preventDefault(); handleCommand(command); }}>
+        <input
+          id="command"
+          autoFocus
+          value={command}
+          onChange={event => setCommand(event.target.value)}
+          placeholder={placeholderText}
+        />
+
+        <button className="command-submit" type="submit">
+          Enter
+        </button>
+      </form>
+
+
+      {/* <form onSubmit={event => { event.preventDefault(); handleCommand(command); }}>
         <label htmlFor="command">Command</label>
         <input id="command" autoFocus value={command} onChange={event => setCommand(event.target.value)} placeholder={placeholderText} />
         <button>Enter</button>
-      </form>
+      </form> */}
     </section>
     </main>
 

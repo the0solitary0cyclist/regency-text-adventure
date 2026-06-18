@@ -410,17 +410,6 @@ button:hover {
   white-space: nowrap;
 }
 
-/* Music controls */
-/* .music-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.music-button {
-  width: 100%;
-} */
-
 .music-section {
   display: flex;
   justify-content: center;
@@ -680,6 +669,32 @@ button:hover {
   margin-top: -2px;
 }
 
+/* .story-link {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.story-link:visited {
+  color: white;
+}
+
+.story-link:hover,
+.story-link:focus {
+  color: white;
+  text-decoration: underline;
+} */
+
+/* .story-text a.story-link,
+.story-text a.story-link:visited,
+.story-text a.story-link:hover,
+.story-text a.story-link:focus,
+.story-text a.story-link:active {
+  color: white !important;
+  font-weight: bold;
+  text-decoration: underline;
+} */
+
   .room-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -711,20 +726,6 @@ button:hover {
 .room-grid .places-dot {
   white-space: pre;
 }
-/* end of added */
-
-
-
-  /* .place-list {
-    font-size: 14px;
-    line-height: 1.25;
-  }
-
-  .place-item {
-    display: inline-block;
-    white-space: nowrap;
-    margin-right: 0.35rem;
-  } */
 
   .sidebar-visual-card .visual-image {
     max-height: 520px;

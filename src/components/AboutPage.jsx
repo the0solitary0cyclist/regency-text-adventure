@@ -13,37 +13,38 @@ export function AboutPage({ StaticPage, Footer, goToPage, currentPage }) {
             but got one anyway
           </p>
 
-          <h2>The Prompt</h2>
+<h2>The Prompt</h2>
 
-          <ul>
-            <li>
-              A podcast, podcast transcript, or live performance where characters from one
-              story discuss another story, as part of their ongoing story or musical analysis
-              podcast.
-            </li>
+<ul>
+  <li>
+    A podcast/podcast transcript/live performance where characters from one story
+    discuss another story, as part of their ongoing story/musical analysis podcast
+    (open to stories I didn&apos;t request for this).
+  </li>
 
-            <li>
-              A <em>Les Misérables</em> character isekai&apos;d into another world and their
-              confusion at 1) the existence of men and 2) the idea that women are supposed
-              to fall in love with men instead of with other women.
-            </li>
+  <li>
+    A <em>Les Ms.</em> character isekai&apos;d into another world and their confusion
+    at 1) the existence of men 2) the idea that women are supposed to fall in love
+    with men instead of with other women. (Also open to works I didn&apos;t request
+    for this.)
+  </li>
 
-            <li>
-              <em>Fangirl</em>, and any character from another work writing fic, about their
-              world, about another world, who knows!
-            </li>
+  <li>
+    <em>Fangirl</em>, and any character from another work writing fic -- about their
+    world? about another world? who knows!
+  </li>
 
-            <li>
-              A note from several years ago titled “solstice swap” that says only:
-              “Gray is Sam Westing.”
-            </li>
-          </ul>
+  <li>
+    A note from several years ago titled “solstice swap” that says only: “Gray is
+    Sam Westing.”
+  </li>
+</ul>
 
-          <p>
-            I chose <em>Pride and Prejudice</em>, <em>Great Comet</em>, and{' '}
-            <em>Earnest</em> as worlds or works that might be fun for these crossover
-            prompts, but do not consider yourself limited.
-          </p>
+<p>
+  I chose <em>Pride and Prejudice</em>, <em>Great Comet</em>, and{' '}
+  <em>Earnest</em> as worlds/works that might be fun for my crossover prompts,
+  but don&apos;t consider yourself limited.
+</p>
 
           <h2>Credits</h2>
 

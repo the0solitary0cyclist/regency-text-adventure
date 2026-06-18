@@ -51,14 +51,7 @@ export const giftHints = [
 
 export const hints = [
   {
-    title: 'How do I begin?',
-    lines: [
-      'examine invitation',
-      'speak reynolds',
-    ],
-  },
-  {
-    title: 'How do I learn about Lady Gray’s paper clues?',
+    title: 'How do I learn about Lady Gray’s clues?',
     lines: [
       'speak elizabeth',
       'speak gwendolen',
@@ -68,32 +61,27 @@ export const hints = [
     ],
   },
   {
-    title: 'What do I do with the paper clues?',
+    title: 'How should the clues be arranged?',
     lines: [
       'arrange beware the gray lady',
     ],
   },
   {
-    title: 'How do I find the key?',
+    title: 'How do I unlock the Study?',
     lines: [
       'go servants passage',
       'take key',
-    ],
-  },
-  {
-    title: 'How do I unlock the Study?',
-    lines: [
       'go great hall',
-      'unlock study with key',
+      'unlock study',
       'go study',
     ],
   },
   {
-    title: 'How do I open the Attic trunk?',
+    title: 'How do I find the manuscript?',
     lines: [
       'go servants passage',
       'go attic',
-      'use hairpins on trunk',
+      'use hairpin on trunk',
     ],
   },
   {
@@ -114,13 +102,13 @@ export const hints = [
   {
     title: 'How do I end the game?',
     lines: [
-      'write chapter',
+      'write next chapter',
     ],
   },
   {
     title: 'What does the ending mean?',
     paragraphs: [
-      'Our avatar Simone Snow is writer Cath Avery (the protagonist of Rainbow Rowell\'s <em>Fangirl</em>). She has been unconscious after a car accident in the snow.',
+      'Our avatar Simone Snow is writer Cather Avery (the protagonist of Rainbow Rowell\'s <em>Fangirl</em>). She has been unconscious after a car accident in the snow.',
       'Her twin sister Wren has been beside her, telling and rewriting familiar stories so that the forgotten sisters become central: Sonya, Jane, Angela, Jeanne’s unnamed sister, and finally Wren herself.',
       'Lady Gray’s mystery leads Cath to recognize that the missing person in every rewritten story is the sister. Cath returns by sitting at the desk and writing the next chapter of her life, which begins when she wakes in the hospital to find Wren beside her and flowers from Professor Piper.',
     ],
