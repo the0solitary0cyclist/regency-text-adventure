@@ -393,6 +393,9 @@ const dialogue = {
 
 const progressMilestones = [
   'false-name',
+  'earnest-revision',
+  'pride-revision',
+  'miserables-revision',
   'fanfiction-thread',
   'bird-in-hand',
   'gray-lady-newspaper',
@@ -406,6 +409,8 @@ const progressMilestones = [
   'valjean-sister-realization',
   'trunk-unlocked',
   'study-unlocked',
+  'cathwren-revealed',
+  'wren-sister-revealed',
   'final-mystery-answered',
   'chapter-written',
 ];
@@ -2013,6 +2018,7 @@ function App() {
     const normalizedAnswer = normalize(answer).replace(/\s+/g, '');
 
     if (normalizedAnswer === 'cathwren') {
+      discover('cathwren-revealed', 'Revealed CATHWREN', 'CATHWREN revealed');
       write(`
         <p>You answer, “CATHWREN.”</p>
 
@@ -2057,6 +2063,7 @@ function App() {
     const normalizedAnswer = normalize(answer).replace(/\s+/g, '');
 
     if (normalizedAnswer === 'cathwren') {
+      discover('cathwren-revealed', 'Revealed CATHWREN', 'CATHWREN revealed');
       write(`
         <p>You answer, “CATHWREN.”</p>
 
@@ -2065,6 +2072,7 @@ function App() {
         <p>“Knowing that,” she says, “what does <em>a bird in the hand</em> mean?”</p>
       `);
     } else {
+      discover('cathwren-revealed', 'Revealed CATHWREN', 'CATHWREN revealed');
       write(`
         <p>You answer, “${answer}.”</p>
 
@@ -2092,6 +2100,7 @@ function App() {
 
   function answerFinalMystery(answer) {
     function revealFinalMystery() {
+      discover('wren-sister-revealed', 'Revealed Wren as Cath’s twin sister', 'Wren revealed');
       discover('final-mystery-answered', 'Answered Lady Gray’s final question', 'Answered final mystery');
       setFinalMysteryStep('write-ending');
       setFinalMysteryMistakes(0);
