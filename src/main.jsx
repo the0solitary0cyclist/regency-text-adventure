@@ -549,6 +549,7 @@ function App() {
   const [message, setMessage] = useState(START_MESSAGE);
   const [command, setCommand] = useState('');
   const [isTrunkUnlocked, setIsTrunkUnlocked] = useState(testState?.isTrunkUnlocked || false);
+  const [isAtStudyDoor, setIsAtStudyDoor] = useState(false);
   const [isStudyUnlocked, setIsStudyUnlocked] = useState(testState?.isStudyUnlocked || false);
   const [placeholderExamples, setPlaceholderExamples] = useState([]);
   const [finalMysteryStep, setFinalMysteryStep] = useState(null);
@@ -1045,6 +1046,7 @@ function App() {
     }
 
     if (requested === 'study' && !isStudyUnlocked) {
+      setIsAtStudyDoor(true);
       write(`
         <p>The Study door is locked.</p>
       `);
@@ -1053,6 +1055,7 @@ function App() {
       return;
     }
 
+    setIsAtStudyDoor(false);
     setLocation(requested);
 
     setVisitedPlaces(previous =>
@@ -1434,21 +1437,28 @@ function App() {
     const normalized = normalize(remainder);
 
     const isUsingKey =
-      normalized.includes('key') || normalized.includes('key');
+      normalized.includes('key');
 
     const isUsingHairpin =
       normalized.includes('hairpin') || normalized.includes('hairpins');
 
+    // use key              works only at location === 'study'
+    // use key on study     works from Great Hall or Study, because study is specified
+    // use key on door      works from Great Hall or Study, because door is specified
+    // unlock study         unchanged
+    // unlock door          unchanged
     const isTryingStudy =
       normalized.includes('study') ||
       normalized.includes('study door') ||
-      (normalized.includes('door') && location === 'greatHall');
+      (normalized.includes('door') && ['greatHall', 'study'].includes(location)) ||
+      (isUsingKey && isAtStudyDoor);
 
     const isTryingTrunk =
-      normalized.includes('trunk');
+      normalized.includes('trunk') ||
+      (isUsingHairpin && location === 'attic');
 
     if (isTryingStudy) {
-      if (!['greatHall', 'study'].includes(location)) {
+      if (!['greatHall', 'study'].includes(location) && !isAtStudyDoor) {
         write(`
           <p>You are not standing by the Study door.</p>
         `);
@@ -1481,7 +1491,8 @@ function App() {
       }
 
       setIsStudyUnlocked(true);
-
+      setIsAtStudyDoor(false);
+      
       setInventory(previous =>
         previous.filter(item => item !== 'key')
       );
@@ -1649,6 +1660,7 @@ function App() {
       }
 
       setIsStudyUnlocked(true);
+      setIsAtStudyDoor(false);
 
       setInventory(previous =>
         previous.filter(item => item !== 'key')
@@ -1689,21 +1701,73 @@ function App() {
     `);
   }
 
-  function parseGiveCommand(remainder) {
-    const parts = remainder.split(' to ');
+  // function parseGiveCommand(remainder) {
+  //   const parts = remainder.split(' to ');
 
-    if (parts.length < 2) {
+  //   if (parts.length < 2) {
+  //     return {
+  //       itemInput: remainder,
+  //       characterInput: ''
+  //     };
+  //   }
+
+  //   return {
+  //     itemInput: parts[0].trim(),
+  //     characterInput: parts.slice(1).join(' to ').trim()
+  //   };
+  // }
+  function parseGiveCommand(remainder) {
+    const cleaned = remainder.trim();
+
+    if (!cleaned) {
       return {
-        itemInput: remainder,
+        itemInput: '',
         characterInput: ''
       };
     }
 
-    return {
-      itemInput: parts[0].trim(),
-      characterInput: parts.slice(1).join(' to ').trim()
-    };
+    const parts = cleaned.split(' to ');
+
+    if (parts.length >= 2) {
+      return {
+        itemInput: parts[0].trim(),
+        characterInput: parts.slice(1).join(' to ').trim()
+      };
+    }
+
+  const words = cleaned.split(/\s+/);
+
+  for (let i = 1; i < words.length; i += 1) {
+    const left = words.slice(0, i).join(' ').trim();
+    const right = words.slice(i).join(' ').trim();
+
+    const leftCharacter = findCharacter(left);
+    const rightCharacter = findCharacter(right);
+
+    const leftItem = findObject(left, inventory);
+    const rightItem = findObject(right, inventory);
+
+    if (leftCharacter && rightItem) {
+      return {
+        itemInput: right,
+        characterInput: left
+      };
+    }
+
+    if (leftItem && rightCharacter) {
+      return {
+        itemInput: left,
+        characterInput: right
+      };
+    }
   }
+
+  return {
+    itemInput: cleaned,
+    characterInput: ''
+  };
+}
+  
 
   function speakTo(noun) {
     const key = findCharacter(noun);
